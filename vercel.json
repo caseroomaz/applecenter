@@ -1,15 +1,5 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "applecenter.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "applecenter.py"
-    }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "applecenter.py" }
   ]
 }
