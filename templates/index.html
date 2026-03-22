@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaseRoom - Apple Center</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; margin: 0; padding: 0; }
+        header { background-color: #000; color: white; padding: 20px; text-align: center; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 20px; display: flex; flex-wrap: wrap; justify-content: center; }
+        .product-card { background: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin: 15px; padding: 20px; width: 250px; text-align: center; }
+        .product-card img { max-width: 100%; border-radius: 5px; }
+        .price { color: #27ae60; font-weight: bold; font-size: 1.2em; }
+        .btn { background-color: #000; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>CaseRoom - Apple Center</h1>
+    <p>Xoş gəlmisiniz, Üzeyir!</p>
+</header>
+
+<div class="container">
+    {% if products %}
+        {% for product in products %}
+        <div class="product-card">
+            <img src="{{ product.image }}" alt="{{ product.name }}">
+            <h3>{{ product.name }}</h3>
+            <p class="price">{{ product.price }} AZN</p>
+            <a href="#" class="btn">Sifariş et</a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div style="text-align: center; width: 100%;">
+            <h3>Hələlik məhsul yoxdur.</h3>
+            <p>Admin paneldən məhsul əlavə etməyi yoxlayın.</p>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
