@@ -2,54 +2,34 @@
 <html lang="az">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.tailwindcss.com"></script>
 <title>{{product.name}}</title>
 </head>
 
-<body class="bg-[#f5f5f7] p-6">
+<body class="bg-gray-100 p-10">
 
 <a href="/" class="text-blue-500">← Geri</a>
 
-{% if product %}
-<div class="bg-white max-w-5xl mx-auto mt-10 p-10 rounded-3xl shadow-lg">
+<div class="bg-white p-10 rounded-3xl max-w-4xl mx-auto mt-6">
 
-<img src="{{product.image}}" class="h-96 mx-auto object-contain">
+<img src="{{product.image}}" class="h-80 mx-auto object-contain">
 
-<h1 class="text-4xl font-bold mt-8 text-center">{{product.name}}</h1>
+<h1 class="text-3xl font-bold mt-6 text-center">{{product.name}}</h1>
 
 <p class="text-center text-gray-500 mt-2">
 Qiymət: <span id="price">{{product.price}}</span> AZN
 </p>
 
-<!-- RƏNG -->
-<div class="mt-8 text-center">
-<h3 class="font-semibold">Rəng seç:</h3>
-<select class="border p-2 rounded mt-2">
-<option>Black</option>
-<option>Silver</option>
-<option>Gold</option>
-<option>Blue</option>
-</select>
-</div>
-
-<!-- YADDAŞ -->
+<!-- STORAGE -->
 <div class="mt-6 text-center">
-<h3 class="font-semibold">Yaddaş seç:</h3>
-<select id="storage" onchange="changePrice()" class="border p-2 rounded mt-2">
+<select id="storage" onchange="changePrice()" class="border p-2 rounded">
 <option value="0">128GB</option>
 <option value="200">256GB (+200 AZN)</option>
 <option value="400">512GB (+400 AZN)</option>
-<option value="600">1TB (+600 AZN)</option>
 </select>
 </div>
 
-<!-- DESCRIPTION -->
-<div class="mt-8 text-center text-gray-600">
-{{product.description or "Ən son texnologiya, güclü performans və premium dizayn."}}
-</div>
-
-<button class="bg-blue-600 text-white px-8 py-3 rounded-full mt-8 block mx-auto">
+<button class="bg-blue-600 text-white px-6 py-3 rounded mt-6 block mx-auto">
 Sifariş et
 </button>
 
@@ -63,10 +43,6 @@ let extra = parseInt(document.getElementById("storage").value) || 0;
 document.getElementById("price").innerText = base + extra;
 }
 </script>
-
-{% else %}
-<h1 class="text-center text-2xl mt-20">Məhsul tapılmadı ❌</h1>
-{% endif %}
 
 </body>
 </html>
