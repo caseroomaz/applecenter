@@ -3,65 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CaseRoom | Apple Store</title>
+    <title>AppleCenter | Premium Store</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
-        body { background-color: #fbfbfd; font-family: -apple-system, sans-serif; }
-        .apple-nav { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(10px); }
-        .product-card { transition: transform 0.4s ease, box-shadow 0.4s ease; border-radius: 20px; background: white; }
-        .product-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .btn-buy { background: #0071e3; border-radius: 20px; transition: 0.3s; }
-        .btn-buy:hover { background: #0077ed; }
-        .logo-text { font-weight: 600; letter-spacing: -1px; color: white; }
+        body { background-color: #f5f5f7; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .nav-blur { background: rgba(0,0,0,0.8); backdrop-filter: saturate(180%) blur(20px); }
+        .apple-card { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 22px; }
+        .apple-card:hover { transform: scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .buy-btn { background: #0071e3; color: white; border-radius: 20px; padding: 8px 16px; transition: 0.3s; }
+        .buy-btn:hover { background: #0077ed; }
+        #chat-bot { position: fixed; bottom: 20px; right: 20px; z-index: 100; }
     </style>
 </head>
 <body>
 
-    <nav class="apple-nav sticky top-0 z-50 p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="logo-text text-2xl">CaseRoom</div>
-            <div class="hidden md:flex space-x-8 text-white text-sm opacity-80">
-                <a href="#" class="hover:opacity-100">Store</a>
-                <a href="#" class="hover:opacity-100">Mac</a>
-                <a href="#" class="hover:opacity-100">iPhone</a>
-                <a href="#" class="hover:opacity-100">Support</a>
+    <nav class="nav-blur sticky top-0 z-50 p-4 text-white">
+        <div class="container mx-auto flex justify-between items-center px-6">
+            <a href="/" class="text-2xl font-bold tracking-tighter">AppleCenter</a>
+            <div class="space-x-6 text-sm opacity-80 hidden md:flex">
+                <a href="#">iPhone</a><a href="#">iPad</a><a href="#">Watch</a><a href="/admin">Admin</a>
             </div>
-            <div class="text-white">🔍 🛒</div>
+            <div>🛒</div>
         </div>
     </nav>
 
-    <section class="text-center py-20 animate__animated animate__fadeIn">
-        <h1 class="text-6xl font-bold mb-4">iPhone 16 Pro</h1>
-        <p class="text-2xl opacity-70">Gözəllik və gücün harmoniyası.</p>
-        <div class="mt-6 flex justify-center space-x-4">
-            <a href="#" class="text-blue-600 hover:underline text-lg">Daha çox öyrən ></a>
-            <a href="#" class="text-blue-600 hover:underline text-lg">Al ></a>
-        </div>
-    </section>
+    <header class="text-center py-24 animate__animated animate__fadeInDown">
+        <h1 class="text-7xl font-bold tracking-tight text-black">iPhone 16 Pro</h1>
+        <p class="text-2xl mt-4 text-gray-500 font-light">İnanılmaz güc. Möhtəşəm dizayn.</p>
+    </header>
 
-    <div class="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 p-6">
+    <main class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
         {% for p in products %}
-        <div class="product-card p-6 text-center">
-            <img src="{{ p.image }}" class="w-full h-64 object-contain mb-4">
-            <h3 class="text-2xl font-bold">{{ p.name }}</h3>
-            <p class="text-xl my-2 text-gray-600">{{ p.price }} AZN-dən</p>
+        <div class="apple-card bg-white p-8 flex flex-col items-center animate__animated animate__fadeInUp">
+            <img src="{{ p.image }}" class="h-64 object-contain mb-6">
+            <h2 class="text-2xl font-semibold">{{ p.name }}</h2>
+            <p class="text-lg text-gray-500 mt-2">{{ p.price }} AZN</p>
             
-            <form action="/order" method="POST" class="mt-4 space-y-2">
-                <input type="hidden" name="product_name" value="{{ p.name }}">
-                <input type="text" name="customer_name" placeholder="Adınız" class="border p-2 w-full rounded-lg" required>
-                <input type="text" name="phone" placeholder="Telefon" class="border p-2 w-full rounded-lg" required>
-                <button type="submit" class="btn-buy text-white px-6 py-2 w-full">Sifariş Ver</button>
-            </form>
-            
-            <a href="/admin/delete/{{ p.id }}" class="text-red-500 text-xs mt-4 block">❌ Məhsulu Sil</a>
+            <button onclick="openModal('{{p.name}}')" class="buy-btn mt-6 w-full font-medium">Sifariş et</button>
         </div>
         {% endfor %}
+    </main>
+
+    <div id="orderModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
+        <div class="bg-white p-8 rounded-3xl w-96">
+            <h2 id="modalTitle" class="text-2xl font-bold mb-4"></h2>
+            <form action="/order" method="POST" class="space-y-4">
+                <input type="hidden" name="p_name" id="p_name_input">
+                <input type="text" name="c_name" placeholder="Adınız" class="w-full border p-3 rounded-xl" required>
+                <input type="text" name="phone" placeholder="Telefon nömrəniz" class="w-full border p-3 rounded-xl" required>
+                <div class="flex space-x-2">
+                    <button type="button" onclick="closeModal()" class="w-1/2 bg-gray-200 p-3 rounded-xl">Ləğv et</button>
+                    <button type="submit" class="w-1/2 buy-btn p-3 rounded-xl">Təsdiqlə</button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <footer class="bg-gray-100 py-10 mt-20 text-center text-gray-500 text-sm">
-        <p>&copy; 2026 CaseRoom Azerbaijan. Bütün hüquqlar qorunur.</p>
-    </footer>
+    <div id="chat-bot">
+        <button onclick="alert('Salam! AppleCenter AI köməkçisi tezliklə aktiv olacaq.')" class="bg-black text-white p-4 rounded-full shadow-2xl">💬 AI Chat</button>
+    </div>
 
+    <script>
+        function openModal(name) {
+            document.getElementById('orderModal').classList.remove('hidden');
+            document.getElementById('modalTitle').innerText = name;
+            document.getElementById('p_name_input').value = name;
+        }
+        function closeModal() {
+            document.getElementById('orderModal').classList.add('hidden');
+        }
+    </script>
 </body>
 </html>
