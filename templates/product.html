@@ -3,80 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{product.name}} - AppleCenter</title>
+    <title>{{product.name}}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background:#fff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-        .color-dot { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.3s; }
-        .color-dot.active { border-color: #007aff; transform: scale(1.2); }
+        body { background:#fff; font-family:-apple-system; }
+        .color-circle { width:28px; height:28px; border-radius:50%; cursor:pointer; border:2px solid #eee; transition:0.2s; }
+        .color-circle.active { border-color:#007aff; transform:scale(1.1); }
     </style>
 </head>
-<body class="p-4">
+<body class="p-6 md:p-12">
 
-<div class="max-w-7xl mx-auto">
-    <a href="/" class="text-gray-400 hover:text-black transition flex items-center mb-8">
-        <span class="mr-2">←</span> Mağazaya qayıt
-    </a>
+<a href="/" class="text-blue-600 mb-10 inline-block">← Geri qayıt</a>
 
-    <div class="flex flex-col md:flex-row items-center gap-16">
-        <div class="w-full md:w-1/2 flex justify-center bg-gray-50 rounded-3xl p-12">
-            <img src="{{product.image}}" id="mainImg" class="max-h-[500px] object-contain transition-all duration-500">
-        </div>
+<div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-16 items-start">
+    
+    <div class="w-full md:w-1/2 sticky top-24 bg-gray-50 rounded-3xl p-10">
+        <img src="{{product.image}}" id="main-img" class="w-full h-[500px] object-contain">
+    </div>
 
-        <div class="w-full md:w-1/2">
-            <h1 class="text-5xl font-bold mb-2">{{product.name}}</h1>
-            <p class="text-2xl text-gray-900 font-light mb-8" id="displayPrice">{{product.price}} AZN</p>
+    <div class="w-full md:w-1/2">
+        <h1 class="text-5xl font-bold mb-4">{{product.name}}</h1>
+        <p class="text-3xl font-light mb-8 text-gray-800" id="price-display">{{product.price}} AZN</p>
 
+        <div class="space-y-10">
             {% if product.color_list %}
-            <div class="mb-8">
-                <p class="text-sm font-semibold mb-3 uppercase tracking-wider">Rəng seçin</p>
+            <div>
+                <h3 class="text-sm font-bold uppercase text-gray-400 mb-4">Rəng seçimi</h3>
                 <div class="flex gap-4">
                     {% for color in product.color_list %}
-                    <div class="color-dot shadow-inner" style="background-color: {{color}};" onclick="selectColor(this, '{{color}}')"></div>
+                    <div class="color-circle" style="background: {{color}};" onclick="selectColor(this)"></div>
                     {% endfor %}
                 </div>
             </div>
             {% endif %}
 
             {% if product.category != 'airpods' and product.storage_list %}
-            <div class="mb-10">
-                <p class="text-sm font-semibold mb-3 uppercase tracking-wider">Yaddaş tutumu</p>
+            <div>
+                <h3 class="text-sm font-bold uppercase text-gray-400 mb-4">Yaddaş seçimi</h3>
                 <div class="grid grid-cols-2 gap-4">
-                    {% for storage in product.storage_list %}
-                    <div class="border rounded-xl p-4 cursor-pointer hover:border-blue-500 transition text-center storage-option" 
-                         onclick="selectStorage(this, {{loop.index0}})">
-                        <span class="block font-medium">{{storage}}</span>
-                        <span class="text-xs text-gray-400">+{{loop.index0 * 200}} AZN</span>
+                    {% for s in product.storage_list %}
+                    <div class="border-2 rounded-2xl p-4 cursor-pointer hover:border-blue-500 transition storage-box" onclick="selectStorage(this, {{loop.index0}})">
+                        <p class="font-bold text-lg text-center">{{s}}</p>
+                        <p class="text-xs text-center text-gray-400">+{{loop.index0 * 200}} AZN</p>
                     </div>
                     {% endfor %}
                 </div>
             </div>
             {% endif %}
 
-            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-5 rounded-2xl font-semibold transition-all shadow-lg shadow-blue-200">
-                Sifariş et
-            </button>
+            <div class="pt-6">
+                <button class="w-full bg-blue-600 text-white py-5 rounded-2xl text-xl font-bold shadow-xl shadow-blue-100">
+                    Sifariş et
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    let basePrice = parseInt("{{product.price}}");
-    let currentExtra = 0;
+    let base = parseInt("{{product.price}}") || 0;
 
-    function selectColor(el, color) {
-        document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+    function selectColor(el) {
+        document.querySelectorAll('.color-circle').forEach(c => c.classList.remove('active'));
         el.classList.add('active');
-        // Burada rəngə görə şəkil dəyişmə məntiqi qoyula bilər (əgər hər rəngin linki bazada olsa)
     }
 
-    function selectStorage(el, index) {
-        document.querySelectorAll('.storage-option').forEach(o => o.classList.add('border-gray-200'), o => o.classList.remove('border-blue-500'));
-        el.classList.remove('border-gray-200');
+    function selectStorage(el, idx) {
+        document.querySelectorAll('.storage-box').forEach(b => b.classList.remove('border-blue-500'));
         el.classList.add('border-blue-500');
-        
-        currentExtra = index * 200; // Hər pillə üçün 200 AZN artım
-        document.getElementById('displayPrice').innerText = (basePrice + currentExtra) + " AZN";
+        let extra = idx * 200;
+        document.getElementById('price-display').innerText = (base + extra) + " AZN";
     }
 </script>
 
