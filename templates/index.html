@@ -1,40 +1,44 @@
-<!DOCTYPE html>
-<html lang="az">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CaseRoom | Apple Premium Store</title>
-    <style>
-        body { margin:0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f5f5f7; }
-        nav { background: rgba(0,0,0,0.8); padding: 15px; text-align: center; position: fixed; width: 100%; top:0; z-index: 100;}
-        nav a { color: white; text-decoration: none; margin: 0 15px; font-size: 14px; }
-        .hero { background: white; padding: 100px 20px; text-align: center; margin-top: 50px; }
-        .hero h1 { font-size: 48px; margin: 0; }
-        .container { max-width: 1000px; margin: 30px auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; padding: 20px; }
-        .card { background: white; border-radius: 15px; padding: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .card img { width: 100%; border-radius: 10px; }
-        .btn { background: #0071e3; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; margin-top: 10px; }
-    </style>
-</head>
-<body>
-    <nav>
-        <a href="#">Ana Səhifə</a>
-        <a href="#">iPhone</a>
-        <a href="#">Səbət</a>
-    </nav>
-    <div class="hero">
-        <h1>iPhone 16 Pro</h1>
-        <p>Gözləntilərin fövqündə.</p>
-    </div>
-    <div class="container">
-        {% for p in products %}
-        <div class="card">
-            <img src="{{ p.image }}" alt="">
-            <h3>{{ p.name }}</h3>
-            <p>{{ p.price }} AZN</p>
-            <button class="btn">Sifariş Et</button>
-        </div>
-        {% endfor %}
-    </div>
-</body>
-</html>
+import os
+import psycopg2
+from psycopg2.extras import RealDictCursor
+from flask import Flask, render_template, request, session
+
+app = Flask(__name__)
+app.secret_key = "caseroom_2026_key"
+
+def get_db_connection():
+    # Vercel-in verdiyi URL-i yoxlayırıq
+    url = os.environ.get('POSTGRES_URL')
+    if not url:
+        return "Baza linki tapılmadı (POSTGRES_URL yoxdur)!"
+
+    try:
+        if url.startswith("postgres://"):
+            url = url.replace("postgres://", "postgresql://", 1)
+        return psycopg2.connect(url)
+    except Exception as e:
+        return f"Bazaya qoşulma xətası: {str(e)}"
+
+@app.route("/")
+def index():
+    res = get_db_connection()
+    
+    # Əgər res yazı (string) qayıdıbsa, deməli xəta var
+    if isinstance(res, str):
+        return f"<h1>Sistem Xətası</h1><p>{res}</p><hr><p>Həll yolu: Vercel panelində 'Storage' bölməsinə girib 'Connect' düyməsini basdığınızdan əmin olun.</p>"
+
+    try:
+        conn = res
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        # Cədvəli hər ehtimala qarşı burada da yoxlayaq
+        cur.execute("CREATE TABLE IF NOT EXISTS products (id SERIAL PRIMARY KEY, name TEXT, price NUMERIC, image TEXT)")
+        cur.execute("SELECT * FROM products ORDER BY id DESC")
+        products = cur.fetchall()
+        cur.close()
+        conn.close()
+        return render_template("index.html", products=products)
+    except Exception as e:
+        return f"Məlumat oxunarkən xəta: {str(e)}"
+
+if __name__ == "__main__":
+    app.run(debug=True)
