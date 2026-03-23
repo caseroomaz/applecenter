@@ -1,81 +1,68 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AppleCenter</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AppleCenter - Premium Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap');
+        body { background:#fbfbfd; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        
+        #splash {
+            position:fixed; inset:0; background:#000;
+            display:flex; align-items:center; justify-content:center;
+            z-index:9999; animation: fadeOut 1.5s forwards 2s;
+        }
+        #splash img { width:80px; filter: invert(1); animation: pulse 1.5s infinite ease-in-out; }
+        
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; } }
+        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
 
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-body { background:#f5f5f7; font-family:-apple-system; }
-
-/* Splash */
-#splash {
-position:fixed; inset:0; background:#000;
-display:flex; align-items:center; justify-content:center;
-flex-direction:column; z-index:999;
-animation:fadeOut 2.5s forwards;
-}
-#splash img { width:120px; animation:zoom 1s ease; }
-
-@keyframes zoom { from{transform:scale(.5);opacity:0} to{transform:scale(1)} }
-@keyframes fadeOut { 80%{opacity:1} 100%{opacity:0;visibility:hidden} }
-
-/* Card */
-.card { transition:.4s; border-radius:20px; }
-.card:hover { transform:scale(1.05); box-shadow:0 20px 40px rgba(0,0,0,.1); }
-</style>
+        .product-card { transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 24px; }
+        .product-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(0,0,0,0.12); }
+    </style>
 </head>
-
 <body>
 
-<!-- SPLASH -->
 <div id="splash">
-<img src="{{ url_for('static', filename='logo.png') }}">
-<h1 class="text-white text-2xl mt-4">AppleCenter</h1>
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
 </div>
 
-<!-- NAVBAR -->
-<nav class="bg-black text-white p-4 flex justify-between items-center">
-<div class="flex items-center space-x-2">
-<img src="{{ url_for('static', filename='logo.png') }}" class="w-8">
-<span class="font-bold">AppleCenter</span>
-</div>
-
-<div class="space-x-6 hidden md:block">
-<a href="#">iPhone</a>
-<a href="#">iPad</a>
-<a href="#">AirPods</a>
-<a href="#">Mac</a>
-<a href="#">Watch</a>
-<a href="#">Aksesuar</a>
-</div>
+<nav class="sticky top-0 z-50 bg-black/80 backdrop-blur-md text-white p-4">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <a href="/" class="flex items-center space-x-2">
+            <img src="{{ url_for('static', filename='logo.png') }}" class="w-6 invert">
+            <span class="font-medium tracking-tight">AppleCenter</span>
+        </a>
+        <div class="hidden md:flex space-x-8 text-sm font-light opacity-80">
+            <a href="#" class="hover:opacity-100">iPhone</a>
+            <a href="#" class="hover:opacity-100">Mac</a>
+            <a href="#" class="hover:opacity-100">AirPods</a>
+            <a href="#" class="hover:opacity-100">Watch</a>
+        </div>
+    </div>
 </nav>
 
-<!-- HEADER -->
-<header class="text-center py-20">
-<h1 class="text-6xl font-bold">Apple Center</h1>
-<p class="text-gray-500 mt-3">Premium texnologiya mağazası</p>
-</header>
+<section class="text-center py-24 px-6">
+    <h1 class="text-5xl md:text-7xl font-bold tracking-tight">Apple Center.</h1>
+    <p class="text-xl md:text-2xl text-gray-500 mt-5 font-light">Sevdiyiniz texnologiyalar indi daha yaxın.</p>
+</section>
 
-<!-- PRODUCTS -->
-<div class="grid md:grid-cols-3 gap-8 p-10">
-{% for p in products %}
-<a href="/product/{{p.id}}">
-<div class="card bg-white p-6 text-center">
-<img src="{{p.image}}" class="h-60 mx-auto object-contain">
-<h2 class="text-xl mt-4">{{p.name}}</h2>
-<p class="text-gray-500">{{p.price}} AZN</p>
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 p-10">
+    {% for p in products %}
+    <a href="/product/{{p.id}}" class="product-card bg-white overflow-hidden p-8 flex flex-col items-center">
+        <div class="h-64 flex items-center justify-center">
+            <img src="{{p.image}}" class="max-h-full object-contain" onerror="this.src='https://via.placeholder.com/300?text=Image+Not+Found'">
+        </div>
+        <div class="mt-8 text-center">
+            <h2 class="text-2xl font-semibold">{{p.name}}</h2>
+            <p class="text-gray-500 mt-2">Başlayan qiymət: {{p.price}} AZN</p>
+            <span class="text-blue-600 mt-4 inline-block font-medium">Daha ətraflı ></span>
+        </div>
+    </a>
+    {% endfor %}
 </div>
-</a>
-{% endfor %}
-</div>
-
-<!-- FOOTER -->
-<footer class="text-center text-gray-400 p-10">
-<a href="/admin" class="text-xs opacity-50">Admin</a>
-</footer>
 
 </body>
 </html>
