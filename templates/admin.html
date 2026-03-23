@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.tailwindcss.com"></script>
+<title>Admin Panel</title>
+</head>
+
+<body class="bg-gray-100 p-10">
+
+<div class="max-w-6xl mx-auto">
+
+<div class="flex justify-between mb-10">
+<h1 class="text-3xl font-bold">Admin Panel</h1>
+<a href="/" class="bg-gray-200 px-4 py-2 rounded">Ana səhifə</a>
+</div>
+
+<!-- ADD PRODUCT -->
+<div class="bg-white p-6 rounded-2xl shadow mb-10">
+<h2 class="text-xl font-bold mb-4">Yeni məhsul əlavə et</h2>
+
+<form action="/admin/add" method="POST" class="space-y-3">
+
+<input name="name" placeholder="Ad" class="w-full p-3 border rounded" required>
+
+<input name="price" placeholder="Qiymət" class="w-full p-3 border rounded" required>
+
+<input name="image" placeholder="Şəkil URL" class="w-full p-3 border rounded" required>
+
+<textarea name="description" placeholder="Məhsul haqqında" class="w-full p-3 border rounded"></textarea>
+
+<button class="bg-green-600 text-white w-full p-3 rounded">
+Əlavə et
+</button>
+
+</form>
+</div>
+
+<!-- PRODUCTS -->
+<div class="bg-white p-6 rounded-2xl shadow mb-10">
+<h2 class="text-xl font-bold mb-4">Məhsullar</h2>
+
+{% for p in products %}
+<div class="flex justify-between border-b py-3">
+<span>{{p.name}} - {{p.price}} AZN</span>
+<a href="/admin/delete/{{p.id}}" class="text-red-500">Sil</a>
+</div>
+{% endfor %}
+
+</div>
+
+<!-- ORDERS -->
+<div class="bg-white p-6 rounded-2xl shadow">
+<h2 class="text-xl font-bold mb-4">Sifarişlər</h2>
+
+{% for o in orders %}
+<div class="border-b py-3">
+<b>{{o.c_name}}</b> - {{o.p_name}} - {{o.phone}}
+</div>
+{% endfor %}
+
+</div>
+
+</div>
+
+</body>
+</html>
