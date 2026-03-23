@@ -1,53 +1,54 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-    <meta charset="UTF-8">
-    <title>AppleCenter Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-10 font-sans">
-    <div class="container mx-auto">
-        <div class="flex justify-between items-center mb-10">
-            <h1 class="text-4xl font-bold text-black tracking-tight">Admin Dashboard</h1>
-            <a href="/" class="bg-gray-200 p-3 rounded-lg text-gray-700 font-medium">Ana Səhifə</a>
-        </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-                <h2 class="text-2xl font-bold mb-6">Yeni Məhsul Əlavə Et</h2>
-                <form action="/admin/add" method="POST" class="space-y-4">
-                    <input type="text" name="name" placeholder="Model adı (məs: iPhone 17 Pro, AirPods Max)" class="w-full border p-3 rounded-xl" required>
-                    <input type="text" name="price" placeholder="Qiymət (məs: 2499)" class="w-full border p-3 rounded-xl" required>
-                    <input type="text" name="image" placeholder="Şəkil Linki (URL) - Arxa fonu ağ olmalıdır!" class="w-full border p-3 rounded-xl" required>
-                    <button class="bg-green-600 text-white p-3 rounded-xl w-full font-medium">Əlavə et</button>
-                </form>
-            </div>
+<body class="bg-gray-100 p-10">
 
-            <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-                <h2 class="text-2xl font-bold mb-6">Son Sifarişlər</h2>
-                <div class="space-y-3 h-80 overflow-y-auto pr-3">
-                    {% for o in orders %}
-                    <div class="border-b p-3 bg-gray-50 rounded-lg">
-                        <div class="font-bold text-black">{{ o.c_name }}</div>
-                        <div class="text-gray-600">{{ o.p_name }}</div>
-                        <div class="text-gray-500">{{ o.phone }}</div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
+<a href="/" class="text-blue-500">← Geri</a>
 
-        <h2 class="text-2xl font-bold mt-12 mb-6">Məhsulları İdarə Et</h2>
-        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-            <div class="space-y-3 h-96 overflow-y-auto pr-3">
-                {% for p in products %}
-                <div class="flex justify-between items-center border-b py-3 bg-gray-50 rounded-lg p-4">
-                    <span class="font-medium text-black">{{ p.name }} - {{ p.price }} AZN</span>
-                    <a href="/admin/delete/{{ p.id }}" class="text-red-600 font-bold bg-red-100 px-4 py-1 rounded-full">Sil</a>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
+<div class="bg-white p-10 rounded-2xl mt-6 max-w-4xl mx-auto">
+
+<img src="{{product.image}}" class="h-80 mx-auto">
+
+<h1 class="text-3xl font-bold mt-6">{{product.name}}</h1>
+
+<p class="text-gray-500 mt-2">Qiymət: <span id="price">{{product.price}}</span> AZN</p>
+
+<!-- COLOR -->
+<div class="mt-6">
+<h3 class="font-semibold">Rəng seç:</h3>
+<select id="color" class="border p-2 rounded mt-2">
+<option>Black</option>
+<option>Silver</option>
+<option>Gold</option>
+</select>
+</div>
+
+<!-- STORAGE -->
+<div class="mt-6">
+<h3 class="font-semibold">Yaddaş seç:</h3>
+<select id="storage" onchange="changePrice()" class="border p-2 rounded mt-2">
+<option value="0">128GB</option>
+<option value="200">256GB (+200 AZN)</option>
+<option value="400">512GB (+400 AZN)</option>
+</select>
+</div>
+
+<button class="bg-blue-600 text-white px-6 py-3 rounded mt-6">Sifariş et</button>
+
+</div>
+
+<script>
+let base = {{product.price}};
+
+function changePrice(){
+let extra = document.getElementById("storage").value;
+document.getElementById("price").innerText = parseInt(base) + parseInt(extra);
+}
+</script>
+
 </body>
 </html>
