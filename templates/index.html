@@ -24,8 +24,7 @@ animation:fadeOut 2.5s forwards;
 
 /* Card */
 .card { transition:.4s; border-radius:20px; }
-.card:hover { transform:scale(1.03); box-shadow:0 20px 40px rgba(0,0,0,.1); }
-
+.card:hover { transform:scale(1.05); box-shadow:0 20px 40px rgba(0,0,0,.1); }
 </style>
 </head>
 
@@ -33,19 +32,19 @@ animation:fadeOut 2.5s forwards;
 
 <!-- SPLASH -->
 <div id="splash">
-<img src="/static/logo.png">
+<img src="{{ url_for('static', filename='logo.png') }}">
 <h1 class="text-white text-2xl mt-4">AppleCenter</h1>
 </div>
 
 <!-- NAVBAR -->
 <nav class="bg-black text-white p-4 flex justify-between items-center">
 <div class="flex items-center space-x-2">
-<img src="/static/logo.png" class="w-8">
+<img src="{{ url_for('static', filename='logo.png') }}" class="w-8">
 <span class="font-bold">AppleCenter</span>
 </div>
 
 <div class="space-x-6 hidden md:block">
-<a href="/">iPhone</a>
+<a href="#">iPhone</a>
 <a href="#">iPad</a>
 <a href="#">AirPods</a>
 <a href="#">Mac</a>
@@ -56,8 +55,8 @@ animation:fadeOut 2.5s forwards;
 
 <!-- HEADER -->
 <header class="text-center py-20">
-<h1 class="text-6xl font-bold">iPhone 17 Pro</h1>
-<p class="text-gray-500 mt-3">Gələcəyin telefonu</p>
+<h1 class="text-6xl font-bold">Apple Store</h1>
+<p class="text-gray-500 mt-3">Premium texnologiya mağazası</p>
 </header>
 
 <!-- PRODUCTS -->
@@ -65,7 +64,7 @@ animation:fadeOut 2.5s forwards;
 {% for p in products %}
 <a href="/product/{{p.id}}">
 <div class="card bg-white p-6 text-center">
-<img src="{{p.image}}" class="h-60 mx-auto">
+<img src="{{p.image}}" class="h-60 mx-auto object-contain">
 <h2 class="text-xl mt-4">{{p.name}}</h2>
 <p class="text-gray-500">{{p.price}} AZN</p>
 </div>
@@ -73,6 +72,7 @@ animation:fadeOut 2.5s forwards;
 {% endfor %}
 </div>
 
+<!-- FOOTER -->
 <footer class="text-center text-gray-400 p-10">
 <a href="/admin" class="text-xs opacity-50">Admin</a>
 </footer>
