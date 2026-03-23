@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <title>AppleCenter Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-10">
+    <h1 class="text-4xl font-bold mb-10">Admin Dashboard</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <div class="bg-white p-6 rounded-2xl shadow">
+            <h2 class="text-2xl font-bold mb-4">Yeni Məhsul</h2>
+            <form action="/admin/add" method="POST" class="space-y-4">
+                <input type="text" name="name" placeholder="Model adı" class="w-full border p-2 rounded">
+                <input type="text" name="price" placeholder="Qiymət" class="w-full border p-2 rounded">
+                <input type="text" name="image" placeholder="Şəkil Linki (URL)" class="w-full border p-2 rounded">
+                <button class="bg-green-600 text-white p-2 rounded w-full">Əlavə et</button>
+            </form>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow">
+            <h2 class="text-2xl font-bold mb-4">Son Sifarişlər</h2>
+            <div class="space-y-2">
+                {% for o in orders %}
+                <div class="border-b p-2">
+                    <b>{{ o.c_name }}</b> - {{ o.p_name }} ({{ o.phone }})
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <h2 class="text-2xl font-bold mt-10 mb-4">Məhsulları İdarə Et</h2>
+    <div class="bg-white rounded-2xl shadow p-6">
+        {% for p in products %}
+        <div class="flex justify-between items-center border-b py-2">
+            <span>{{ p.name }} - {{ p.price }} AZN</span>
+            <a href="/admin/delete/{{ p.id }}" class="text-red-600 font-bold">Sil</a>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
