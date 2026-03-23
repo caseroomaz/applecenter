@@ -3,99 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AppleCenter | Premium Store</title>
+    <title>Apple Center | Premium Mağaza</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
     <style>
-        body { background-color: #fbfbfd; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow-x: hidden; }
+        body { background-color: #fbfbfd; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         .nav-blur { background: rgba(0,0,0,0.8); backdrop-filter: saturate(180%) blur(20px); }
-        .apple-card { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 22px; cursor: pointer; }
-        .apple-card:hover { transform: scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .buy-btn { background: #0071e3; color: white; border-radius: 20px; padding: 8px 16px; transition: 0.3s; }
-        .buy-btn:hover { background: #0077ed; }
-        .store-logo { font-size: 20px; font-weight: 700; color: #f5f5f7; letter-spacing: -1px; }
+        .apple-card { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 22px; cursor: pointer; background: white; }
+        .apple-card:hover { transform: scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
         
-        /* Splash Screen (Giriş Animasiyası) */
+        /* Splash Screen */
         #splash-screen {
             position: fixed; inset: 0; background: #000; z-index: 1000;
             display: flex; flex-direction: column; items: center; justify-content: center;
             animation: fadeOut 2.5s forwards;
         }
-        #splash-logo {
-            font-size: 80px; font-weight: 800; color: #fff; letter-spacing: -3px;
-            animation: zoomIn 1s ease-out, pulse 2s infinite 1s;
-        }
-        #splash-text {
-            font-size: 24px; color: #aaa; margin-top: 10px;
-            animation: fadeInUp 1s ease-out 0.5s;
+        .splash-img {
+            width: 150px; height: 150px; border-radius: 50%;
+            animation: zoomIn 1.2s ease-out;
         }
 
-        @keyframes fadeOut { 0% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
-        @keyframes zoomIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        @keyframes pulse { 0%, 100% { text-shadow: 0 0 10px rgba(255,255,255,0.2); } 50% { text-shadow: 0 0 20px rgba(255,255,255,0.6); } }
+        @keyframes fadeOut { 0%, 80% { opacity: 1; visibility: visible; } 100% { opacity: 0; visibility: hidden; } }
+        @keyframes zoomIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
 
     <div id="splash-screen">
-        <div id="splash-logo">A C</div>
-        <div id="splash-text" class="animate__animated">AppleCenter Azerbaijan</div>
+        <img src="https://i.ibb.co/3mS00dZ/image-3bdee7.png" class="splash-img" alt="Logo">
+        <div class="mt-4 text-white text-xl font-light tracking-widest animate__animated animate__fadeInUp">APPLE CENTER</div>
     </div>
 
     <nav class="nav-blur sticky top-0 z-50 p-4 text-white">
         <div class="container mx-auto flex justify-between items-center px-6">
-            <a href="/" class="flex items-center space-x-2">
-                <div class="bg-black p-2 rounded-lg store-logo">A</div>
-                <span class="store-logo">AppleCenter</span>
+            <a href="/" class="flex items-center space-x-3">
+                <img src="https://i.ibb.co/3mS00dZ/image-3bdee7.png" class="w-8 h-8 rounded-full" alt="Logo">
+                <span class="font-bold text-lg tracking-tight">Apple Center</span>
             </a>
-            <div class="space-x-6 text-sm opacity-80 hidden md:flex">
-                <a href="#">iPhone</a><a href="#">iPad</a><a href="#">Aksesuarlar</a><a href="/admin">Admin</a>
+            <div class="space-x-8 text-sm font-light hidden md:flex">
+                <a href="#" class="hover:text-gray-400">iPhone</a>
+                <a href="#" class="hover:text-gray-400">AirPods</a>
+                <a href="#" class="hover:text-gray-400">Aksesuarlar</a>
             </div>
-            <div>🛒</div>
+            <div class="flex items-center space-x-4">
+                <a href="/admin" class="text-xs opacity-50 hover:opacity-100 transition">Admin</a>
+                <span class="cursor-pointer text-xl">🛒</span>
+            </div>
         </div>
     </nav>
 
-    <header class="text-center py-24 animate__animated animate__fadeInDown">
-        <h1 class="text-7xl font-bold tracking-tight text-black">iPhone 17 Pro</h1>
-        <p class="text-2xl mt-4 text-gray-500 font-light">Gələcəyi bu gün hiss et. İnanılmaz güc.</p>
+    <header class="text-center py-20 animate__animated animate__fadeIn">
+        <h1 class="text-6xl font-bold text-black mb-4">iPhone 17 Pro</h1>
+        <p class="text-2xl text-gray-500 font-light">Titan gücü. Süni zəka zərifliyi.</p>
+        <div class="mt-8 space-x-4">
+            <button class="bg-blue-600 text-white px-8 py-3 rounded-full hover:bg-blue-700 transition">İndi al</button>
+            <a href="#" class="text-blue-600 hover:underline">Daha çox öyrən ></a>
+        </div>
     </header>
 
-    <main class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
+    <main class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
         {% for p in products %}
-        <div class="apple-card bg-white p-8 flex flex-col items-center animate__animated animate__fadeInUp">
-            <img src="{{ p.image }}" class="h-64 object-contain mb-6">
-            <h2 class="text-2xl font-semibold">{{ p.name }}</h2>
+        <div class="apple-card p-10 flex flex-col items-center">
+            <div class="h-64 flex items-center justify-center mb-8">
+                <img src="{{ p.image }}" class="max-h-full object-contain" alt="{{ p.name }}">
+            </div>
+            <h2 class="text-2xl font-semibold text-gray-900">{{ p.name }}</h2>
             <p class="text-lg text-gray-500 mt-2">{{ p.price }} AZN</p>
-            
-            <button onclick="openModal('{{p.name}}', '{{p.price}}')" class="buy-btn mt-6 w-full font-medium">Sifariş et</button>
+            <button onclick="openOrder('{{p.name}}', '{{p.price}}')" class="mt-6 bg-gray-900 text-white px-6 py-2 rounded-full hover:bg-black transition">Sifariş</button>
         </div>
         {% endfor %}
     </main>
 
-    <div id="orderModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
-        <div class="bg-white p-8 rounded-3xl w-96">
-            <h2 id="modalTitle" class="text-2xl font-bold mb-1"></h2>
-            <p id="modalPrice" class="text-lg text-gray-500 mb-6"></p>
+    <div id="orderModal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100]">
+        <div class="bg-white p-10 rounded-[32px] w-full max-w-md shadow-2xl">
+            <h2 id="modalTitle" class="text-3xl font-bold mb-2"></h2>
+            <p id="modalPrice" class="text-xl text-gray-500 mb-8"></p>
             <form action="/order" method="POST" class="space-y-4">
                 <input type="hidden" name="p_name" id="p_name_input">
-                <input type="text" name="c_name" placeholder="Adınız" class="w-full border p-3 rounded-xl focus:ring-2 focus:ring-blue-500" required>
-                <input type="text" name="phone" placeholder="Telefon nömrəniz" class="w-full border p-3 rounded-xl focus:ring-2 focus:ring-blue-500" required>
-                <div class="flex space-x-2">
-                    <button type="button" onclick="closeModal()" class="w-1/2 bg-gray-200 p-3 rounded-xl">Ləğv et</button>
-                    <button type="submit" class="w-1/2 buy-btn p-3 rounded-xl">Təsdiqlə</button>
+                <input type="text" name="c_name" placeholder="Ad və Soyad" class="w-full bg-gray-100 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none" required>
+                <input type="text" name="phone" placeholder="Əlaqə nömrəsi" class="w-full bg-gray-100 border-none p-4 rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none" required>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeOrder()" class="flex-1 py-4 bg-gray-200 rounded-2xl font-bold">Ləğv et</button>
+                    <button type="submit" class="flex-1 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-lg shadow-blue-200">Təsdiqlə</button>
                 </div>
             </form>
         </div>
     </div>
 
     <script>
-        function openModal(name, price) {
+        function openOrder(name, price) {
             document.getElementById('orderModal').classList.remove('hidden');
             document.getElementById('modalTitle').innerText = name;
-            document.getElementById('modalPrice').innerText = price + ' AZN-dən';
+            document.getElementById('modalPrice').innerText = price + ' AZN';
             document.getElementById('p_name_input').value = name;
         }
-        function closeModal() {
+        function closeOrder() {
             document.getElementById('orderModal').classList.add('hidden');
         }
     </script>
