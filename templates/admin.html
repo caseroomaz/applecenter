@@ -1,28 +1,14 @@
-<!DOCTYPE html>
-<html lang="az">
-<head>
-<meta charset="UTF-8">
-<script src="https://cdn.tailwindcss.com"></script>
-<title>Admin</title>
-</head>
-
-<body class="bg-gray-100 p-10">
-
-<h1 class="text-3xl font-bold mb-6">Admin Panel</h1>
-
-<form action="/admin/add" method="POST" class="space-y-3 mb-10">
-<input name="name" placeholder="Ad" class="w-full p-3 border rounded" required>
-<input name="price" placeholder="Qiymət" class="w-full p-3 border rounded" required>
-<input name="image" placeholder="Şəkil URL" class="w-full p-3 border rounded" required>
-<button class="bg-green-600 text-white p-3 w-full rounded">Əlavə et</button>
+<form action="/admin/add" method="POST" class="bg-white p-6 rounded-xl shadow-sm space-y-4">
+    <input name="name" placeholder="Məhsulun adı (məs: iPhone 17)" class="w-full p-3 border rounded" required>
+    <select name="category" class="w-full p-3 border rounded">
+        <option value="iphone">iPhone</option>
+        <option value="mac">MacBook</option>
+        <option value="airpods">AirPods</option>
+    </select>
+    <input name="price" type="number" placeholder="Qiymət (AZN)" class="w-full p-3 border rounded" required>
+    <input name="image" placeholder="Şəkil URL" class="w-full p-3 border rounded" required>
+    <input name="colors" placeholder="Rənglər (məs: #000,#fff,#gold)" class="w-full p-3 border rounded">
+    <input name="storages" placeholder="Yaddaşlar (məs: 128GB,256GB,512GB)" class="w-full p-3 border rounded">
+    <textarea name="description" placeholder="Açıqlama" class="w-full p-3 border rounded"></textarea>
+    <button class="bg-black text-white p-4 w-full rounded-xl font-bold">Məhsulu Əlavə Et</button>
 </form>
-
-{% for p in products %}
-<div class="flex justify-between border-b py-2">
-<span>{{p.name}} - {{p.price}}</span>
-<a href="/admin/delete/{{p.id}}" class="text-red-500">Sil</a>
-</div>
-{% endfor %}
-
-</body>
-</html>
