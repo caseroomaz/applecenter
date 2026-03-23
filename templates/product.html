@@ -1,47 +1,83 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-<meta charset="UTF-8">
-<script src="https://cdn.tailwindcss.com"></script>
-<title>{{product.name}}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{product.name}} - AppleCenter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background:#fff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+        .color-dot { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.3s; }
+        .color-dot.active { border-color: #007aff; transform: scale(1.2); }
+    </style>
 </head>
+<body class="p-4">
 
-<body class="bg-gray-100 p-10">
+<div class="max-w-7xl mx-auto">
+    <a href="/" class="text-gray-400 hover:text-black transition flex items-center mb-8">
+        <span class="mr-2">←</span> Mağazaya qayıt
+    </a>
 
-<a href="/" class="text-blue-500">← Geri</a>
+    <div class="flex flex-col md:flex-row items-center gap-16">
+        <div class="w-full md:w-1/2 flex justify-center bg-gray-50 rounded-3xl p-12">
+            <img src="{{product.image}}" id="mainImg" class="max-h-[500px] object-contain transition-all duration-500">
+        </div>
 
-<div class="bg-white p-10 rounded-3xl max-w-4xl mx-auto mt-6">
+        <div class="w-full md:w-1/2">
+            <h1 class="text-5xl font-bold mb-2">{{product.name}}</h1>
+            <p class="text-2xl text-gray-900 font-light mb-8" id="displayPrice">{{product.price}} AZN</p>
 
-<img src="{{product.image}}" class="h-80 mx-auto object-contain">
+            {% if product.color_list %}
+            <div class="mb-8">
+                <p class="text-sm font-semibold mb-3 uppercase tracking-wider">Rəng seçin</p>
+                <div class="flex gap-4">
+                    {% for color in product.color_list %}
+                    <div class="color-dot shadow-inner" style="background-color: {{color}};" onclick="selectColor(this, '{{color}}')"></div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
 
-<h1 class="text-3xl font-bold mt-6 text-center">{{product.name}}</h1>
+            {% if product.category != 'airpods' and product.storage_list %}
+            <div class="mb-10">
+                <p class="text-sm font-semibold mb-3 uppercase tracking-wider">Yaddaş tutumu</p>
+                <div class="grid grid-cols-2 gap-4">
+                    {% for storage in product.storage_list %}
+                    <div class="border rounded-xl p-4 cursor-pointer hover:border-blue-500 transition text-center storage-option" 
+                         onclick="selectStorage(this, {{loop.index0}})">
+                        <span class="block font-medium">{{storage}}</span>
+                        <span class="text-xs text-gray-400">+{{loop.index0 * 200}} AZN</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
 
-<p class="text-center text-gray-500 mt-2">
-Qiymət: <span id="price">{{product.price}}</span> AZN
-</p>
-
-<!-- STORAGE -->
-<div class="mt-6 text-center">
-<select id="storage" onchange="changePrice()" class="border p-2 rounded">
-<option value="0">128GB</option>
-<option value="200">256GB (+200 AZN)</option>
-<option value="400">512GB (+400 AZN)</option>
-</select>
-</div>
-
-<button class="bg-blue-600 text-white px-6 py-3 rounded mt-6 block mx-auto">
-Sifariş et
-</button>
-
+            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-5 rounded-2xl font-semibold transition-all shadow-lg shadow-blue-200">
+                Sifariş et
+            </button>
+        </div>
+    </div>
 </div>
 
 <script>
-let base = parseInt("{{product.price}}") || 0;
+    let basePrice = parseInt("{{product.price}}");
+    let currentExtra = 0;
 
-function changePrice(){
-let extra = parseInt(document.getElementById("storage").value) || 0;
-document.getElementById("price").innerText = base + extra;
-}
+    function selectColor(el, color) {
+        document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+        el.classList.add('active');
+        // Burada rəngə görə şəkil dəyişmə məntiqi qoyula bilər (əgər hər rəngin linki bazada olsa)
+    }
+
+    function selectStorage(el, index) {
+        document.querySelectorAll('.storage-option').forEach(o => o.classList.add('border-gray-200'), o => o.classList.remove('border-blue-500'));
+        el.classList.remove('border-gray-200');
+        el.classList.add('border-blue-500');
+        
+        currentExtra = index * 200; // Hər pillə üçün 200 AZN artım
+        document.getElementById('displayPrice').innerText = (basePrice + currentExtra) + " AZN";
+    }
 </script>
 
 </body>
