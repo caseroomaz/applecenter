@@ -1,18 +1,13 @@
-import os
-from flask import Flask, render_template, request, redirect, session, jsonify
-from werkzeug.utils import secure_filename
+from flask import Flask, render_template, request, redirect, session
 
 app = Flask(__name__)
 app.secret_key = "applecenter_2026_premium_key"
-
-UPLOAD_FOLDER = "static/uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 ADMIN_USER = "admin"
 ADMIN_PASS = "1234"
 
 # -----------------------------
-# 🔥 DATA (Products + Favorites)
+# PRODUCTS + FAVORITES
 # -----------------------------
 products = [
     {
@@ -20,7 +15,7 @@ products = [
         "name":"iPhone 17 Pro",
         "price":3499,
         "category":"iPhone",
-        "image":"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-pro-model-unselect-gallery-2-202409",
+        "image":"/static/iphone17pro.png",
         "colors":["#1c1c1e","#f5f5f7","#d4af37"], 
         "likes":0
     },
@@ -29,7 +24,7 @@ products = [
         "name":"iPhone 17",
         "price":2699,
         "category":"iPhone",
-        "image":"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-model-unselect-gallery-1-202409",
+        "image":"/static/iphone17.png",
         "colors":["#3a3a3c","#ffd1dc","#c7fcec"],
         "likes":0
     },
@@ -38,7 +33,7 @@ products = [
         "name":"AirPods Max",
         "price":1299,
         "category":"AirPods",
-        "image":"https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/airpods-max-select-202409-silver",
+        "image":"/static/airpodsmax.png",
         "colors":["#e5e5ea","#a2845e","#000000"],
         "likes":0
     }
@@ -50,10 +45,7 @@ products = [
 @app.route("/")
 def home():
     q = request.args.get("q")
-    if q:
-        filtered = [p for p in products if q.lower() in p["name"].lower()]
-    else:
-        filtered = products
+    filtered = [p for p in products if q.lower() in p["name"].lower()] if q else products
     return render_template("index.html", products=filtered)
 
 # -----------------------------
@@ -105,25 +97,19 @@ def admin():
     return render_template("admin.html", products=products)
 
 # -----------------------------
-# ADD PRODUCT (UPLOAD)
+# ADD PRODUCT (LINK ONLY)
 # -----------------------------
 @app.route("/admin/add", methods=["POST"])
 def add_product():
     if "admin" not in session:
         return redirect("/admin/login")
-    file = request.files.get("image")
-    if file:
-        filename = secure_filename(file.filename)
-        path = os.path.join(UPLOAD_FOLDER, filename)
-        file.save(path)
-    else:
-        path = ""
+    # Fayl upload-u silindi
     new_id = max([p["id"] for p in products]) + 1 if products else 1
     products.append({
         "id": new_id,
         "name": request.form["name"],
         "price": int(request.form["price"]),
-        "image": path,
+        "image": request.form["image"],   # link daxil edilir
         "category": request.form.get("category","Other"),
         "colors": ["#000","#fff"],  # default colors
         "likes":0
@@ -139,11 +125,4 @@ def delete_product(id):
     products = [p for p in products if p["id"] != id]
     return redirect("/admin")
 
-# -----------------------------
-# API
-# -----------------------------
-@app.route("/api/products")
-def api_products():
-    return jsonify({"data": products})
-
-application = app
+application = apps
