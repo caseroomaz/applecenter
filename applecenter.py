@@ -3,72 +3,73 @@ from flask import Flask, render_template, request, redirect, session
 app = Flask(__name__)
 app.secret_key = "applecenter_2026_premium_key"
 
+# Admin məlumatları
 ADMIN_USER = "admin"
 ADMIN_PASS = "1234"
 
-# -----------------------------
-# PRODUCTS + FAVORITES
-# -----------------------------
+# -----------------------------------
+# Məhsullar və Wishlist
+# -----------------------------------
 products = [
     {
-        "id":1,
-        "name":"iPhone 17 Pro",
-        "price":3499,
-        "category":"iPhone",
-        "image":"/static/iphone17pro.png",
-        "colors":["#1c1c1e","#f5f5f7","#d4af37"], 
-        "likes":0
+        "id": 1,
+        "name": "iPhone 17 Pro",
+        "price": 3499,
+        "category": "iPhone",
+        "image": "/static/iphone17pro.png",
+        "colors": ["#1c1c1e","#f5f5f7","#d4af37"],
+        "likes": 0
     },
     {
-        "id":2,
-        "name":"iPhone 17",
-        "price":2699,
-        "category":"iPhone",
-        "image":"/static/iphone17.png",
-        "colors":["#3a3a3c","#ffd1dc","#c7fcec"],
-        "likes":0
+        "id": 2,
+        "name": "iPhone 17",
+        "price": 2699,
+        "category": "iPhone",
+        "image": "/static/iphone17.png",
+        "colors": ["#3a3a3c","#ffd1dc","#c7fcec"],
+        "likes": 0
     },
     {
-        "id":3,
-        "name":"AirPods Max",
-        "price":1299,
-        "category":"AirPods",
-        "image":"/static/airpodsmax.png",
-        "colors":["#e5e5ea","#a2845e","#000000"],
-        "likes":0
+        "id": 3,
+        "name": "AirPods Max",
+        "price": 1299,
+        "category": "AirPods",
+        "image": "/static/airpodsmax.png",
+        "colors": ["#e5e5ea","#a2845e","#000000"],
+        "likes": 0
     }
 ]
 
-# -----------------------------
-# HOME PAGE
-# -----------------------------
+# -----------------------------------
+# Ana səhifə
+# -----------------------------------
 @app.route("/")
 def home():
     q = request.args.get("q")
     filtered = [p for p in products if q.lower() in p["name"].lower()] if q else products
     return render_template("index.html", products=filtered)
 
-# -----------------------------
-# CATEGORY PAGE
-# -----------------------------
+# -----------------------------------
+# Kateqoriya səhifəsi
+# -----------------------------------
 @app.route("/category/<cat>")
 def category(cat):
     filtered = [p for p in products if p["category"] == cat]
     return render_template("index.html", products=filtered)
 
-# -----------------------------
-# PRODUCT PAGE
-# -----------------------------
+# -----------------------------------
+# Product səhifəsi
+# -----------------------------------
 @app.route("/product/<int:id>")
 def product(id):
     p = next((x for x in products if x["id"] == id), products[0])
-    p["images"] = [p["image"], p["image"], p["image"]]
+    p["images"] = [p["image"], p["image"], p["image"]]  # Demo üçün eyni şəkil
     p["storage_list"] = ["128GB","256GB","512GB"]
     return render_template("product.html", product=p)
 
-# -----------------------------
-# FAVORITE / WISHLIST
-# -----------------------------
+# -----------------------------------
+# Wishlist (Favori)
+# -----------------------------------
 @app.route("/wishlist/add/<int:id>")
 def wishlist_add(id):
     for p in products:
@@ -76,9 +77,9 @@ def wishlist_add(id):
             p["likes"] += 1
     return redirect("/")
 
-# -----------------------------
-# ADMIN LOGIN
-# -----------------------------
+# -----------------------------------
+# Admin login
+# -----------------------------------
 @app.route("/admin/login", methods=["GET","POST"])
 def admin_login():
     if request.method=="POST":
@@ -87,23 +88,22 @@ def admin_login():
             return redirect("/admin")
     return render_template("admin_login.html")
 
-# -----------------------------
-# ADMIN PANEL
-# -----------------------------
+# -----------------------------------
+# Admin panel
+# -----------------------------------
 @app.route("/admin")
 def admin():
     if "admin" not in session:
         return redirect("/admin/login")
     return render_template("admin.html", products=products)
 
-# -----------------------------
-# ADD PRODUCT (LINK ONLY)
-# -----------------------------
+# -----------------------------------
+# Məhsul əlavə et (link ilə)
+# -----------------------------------
 @app.route("/admin/add", methods=["POST"])
 def add_product():
     if "admin" not in session:
         return redirect("/admin/login")
-    # Fayl upload-u silindi
     new_id = max([p["id"] for p in products]) + 1 if products else 1
     products.append({
         "id": new_id,
@@ -116,13 +116,20 @@ def add_product():
     })
     return redirect("/admin")
 
-# -----------------------------
-# DELETE PRODUCT
-# -----------------------------
+# -----------------------------------
+# Məhsul sil
+# -----------------------------------
 @app.route("/admin/delete/<int:id>")
 def delete_product(id):
     global products
     products = [p for p in products if p["id"] != id]
     return redirect("/admin")
 
-application = apps
+# -----------------------------------
+# API (istəyə görə)
+# -----------------------------------
+@app.route("/api/products")
+def api_products():
+    return {"data": products}
+
+application = app
