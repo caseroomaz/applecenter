@@ -13,10 +13,10 @@ ADMIN_PASS = "1234"
 products = [
     {
         "id": 1,
-        "name": "iPhone 17 Pro",
+        "name": "iPhone 17 Pro Max",
         "price": 3499,
         "category": "iPhone",
-        "image": "",  # buraya link əlavə et
+        "image": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=NUNzdzNKR0FJbmhKWm5YamRHb05tUzkyK3hWak1ybHhtWDkwUXVINFc0RkZqUFNQc3E5VDh2SEx1ZlJpSjNkR0FOL1haWCt6TDJ0UWlLb09XajVNdENYR1ZZZnEyMVlVQUliTThGMjNyaFFxbm9iakpBWkhjT1hBM3BZeU9zQ0JzNmlxRHcrTG16TVFTaEZGMjZVM3ZB&traceId=1",  # buraya link əlavə et
         "colors": ["#1c1c1e","#f5f5f7","#d4af37"],
         "likes": 0
     },
