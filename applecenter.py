@@ -16,7 +16,7 @@ products = [
         "name": "iPhone 17 Pro",
         "price": 3499,
         "category": "iPhone",
-        "image": "/static/iphone17pro.png",
+        "image": "",  # buraya link əlavə et
         "colors": ["#1c1c1e","#f5f5f7","#d4af37"],
         "likes": 0
     },
@@ -25,7 +25,7 @@ products = [
         "name": "iPhone 17",
         "price": 2699,
         "category": "iPhone",
-        "image": "/static/iphone17.png",
+        "image": "",  # buraya link əlavə et
         "colors": ["#3a3a3c","#ffd1dc","#c7fcec"],
         "likes": 0
     },
@@ -34,7 +34,7 @@ products = [
         "name": "AirPods Max",
         "price": 1299,
         "category": "AirPods",
-        "image": "/static/airpodsmax.png",
+        "image": "",  # buraya link əlavə et
         "colors": ["#e5e5ea","#a2845e","#000000"],
         "likes": 0
     }
@@ -109,7 +109,7 @@ def add_product():
         "id": new_id,
         "name": request.form["name"],
         "price": int(request.form["price"]),
-        "image": request.form["image"],   # link daxil edilir
+        "image": request.form["image"],   # buraya link əlavə edəcəksən
         "category": request.form.get("category","Other"),
         "colors": ["#000","#fff"],  # default colors
         "likes":0
