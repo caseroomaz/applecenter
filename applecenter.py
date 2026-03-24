@@ -31,10 +31,10 @@ products = [
     },
     {
         "id": 3,
-        "name": "AirPods Max",
+        "name": "AirPods 4",
         "price": 1299,
         "category": "AirPods",
-        "image": "",  # buraya link əlavə et
+        "image": "https://avatars.mds.yandex.net/i?id=f6b9fe5672c5d819ec4d890481faeb0a582798af-4216017-images-thumbs&n=13",  # buraya link əlavə et
         "colors": ["#e5e5ea","#a2845e","#000000"],
         "likes": 0
     }
