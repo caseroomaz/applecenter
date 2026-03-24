@@ -25,7 +25,7 @@ products = [
         "name": "iPhone 17",
         "price": 2699,
         "category": "iPhone",
-        "image": "",  # buraya link əlavə et
+        "image": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-unselect-gallery-1-202509_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=WGdCRlQ0YVlqbTdXTEkxRnVQb0oxdFgrSXpWVEhWaW9YTGlWRHFoSHU0OUFxWTdCbFhxa0dhaGFmNkNjSWxSb0FOL1haWCt6TDJ0UWlLb09XajVNdENYR1ZZZnEyMVlVQUliTThGMjNyaFN4MTNVU0FrSGRPbjQxdTdMMFNTYTBnWTRGR2xpS0I2cnhMYzZYallpSnFB&traceId=1",  # buraya link əlavə et
         "colors": ["#3a3a3c","#ffd1dc","#c7fcec"],
         "likes": 0
     },
