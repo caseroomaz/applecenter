@@ -1,43 +1,76 @@
-<!DOCTYPE html>
-<html lang="az">
-<head>
-    <meta charset="UTF-8">
-    <title>AppleCenter Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 p-10">
-    <div class="max-w-4xl mx-auto">
-        <h1 class="text-3xl font-bold mb-8">Məhsul İdarəetməsi</h1>
+import os
+import psycopg2
+from psycopg2.extras import RealDictCursor
+from flask import Flask, render_template, request, redirect
+
+app = Flask(__name__)
+
+def get_db_connection():
+    url = os.environ.get('POSTGRES_URL')
+    if url and url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql://", 1)
+    return psycopg2.connect(url)
+
+@app.route("/")
+def index():
+    try:
+        cat = request.args.get('cat')
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
         
-        <form action="/admin/add" method="POST" class="bg-white p-8 rounded-3xl shadow-sm space-y-4 mb-10">
-            <div class="grid grid-cols-2 gap-4">
-                <input name="name" placeholder="Məhsul adı (məs: iPhone 17 Pro)" class="p-4 border rounded-xl" required>
-                <input name="price" type="number" placeholder="Qiymət (AZN)" class="p-4 border rounded-xl" required>
-            </div>
+        # Kateqoriya seçilibsə ona görə, seçilməyibsə hamısını gətir
+        if cat:
+            cur.execute("SELECT * FROM products WHERE category ILIKE %s ORDER BY id DESC", (cat,))
+        else:
+            cur.execute("SELECT * FROM products ORDER BY id DESC")
             
-            <div class="grid grid-cols-2 gap-4">
-                <input name="image" placeholder="Əsas şəkil URL" class="p-4 border rounded-xl" required>
-                <select name="category" class="p-4 border rounded-xl bg-white">
-                    <option>iPhone</option><option>iPad</option><option>AirPods</option>
-                    <option>Mac</option><option>Watch</option><option>Aksesuar</option>
-                </select>
-            </div>
+        products = cur.fetchall()
+        
+        # Navbar üçün kateqoriya siyahısı
+        categories = ["iPhone", "iPad", "Mac", "Watch", "AirPods", "Aksesuar"]
+        
+        cur.close(); conn.close()
+        return render_template("index.html", products=products, categories=categories)
+    except Exception as e:
+        return f"Ana səhifə xətası: {str(e)}"
 
-            <input name="colors" placeholder="Rənglər (məs: black,silver,gold)" class="w-full p-4 border rounded-xl">
-            <input name="storages" placeholder="Yaddaşlar (məs: 128GB,256GB,512GB)" class="w-full p-4 border rounded-xl">
-            <textarea name="description" placeholder="Məhsul haqqında məlumat" class="w-full p-4 border rounded-xl"></textarea>
-            
-            <button class="w-full bg-black text-white p-5 rounded-2xl font-bold">Məhsulu Bazaya Əlavə Et</button>
-        </form>
+@app.route("/product/<int:id>")
+def product_detail(id):
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        cur.execute("SELECT * FROM products WHERE id=%s", (id,))
+        product = cur.fetchone()
+        cur.close(); conn.close()
+        
+        if not product: return "Məhsul tapılmadı", 404
 
-        <div class="space-y-4">
-            {% for p in products %}
-            <div class="bg-white p-4 rounded-2xl flex justify-between items-center px-8">
-                <span class="font-bold">{{p.name}} ({{p.category}})</span>
-                <a href="/admin/delete/{{p.id}}" class="text-red-500 font-semibold">Sil</a>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</body>
-</html>
+        # Çoxlu şəkil məntiqi: əsas şəkil + vergüllə ayrılmış digər şəkillər
+        img_list = [product['image']]
+        if product.get('extra_images'):
+            img_list.extend(product['extra_images'].split(','))
+        product['images'] = img_list
+
+        product['color_list'] = product.get('colors', "").split(',') if product.get('colors') else []
+        product['storage_list'] = product.get('storages', "").split(',') if product.get('storages') else []
+        
+        return render_template("product.html", product=product)
+    except Exception as e:
+        return f"Məhsul səhifəsi xətası: {str(e)}"
+
+# Admin tərəfdə extra_images üçün yer ayırırıq
+@app.route("/admin/add", methods=["POST"])
+def add():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO products (name, price, image, category, colors, storages, extra_images) VALUES (%s,%s,%s,%s,%s,%s,%s)",
+        (request.form['name'], request.form['price'], request.form['image'], 
+         request.form.get('category', 'iPhone'), request.form.get('colors', ''), 
+         request.form.get('storages', ''), request.form.get('extra_images', ''))
+    )
+    conn.commit()
+    cur.close(); conn.close()
+    return redirect("/admin")
+
+application = app
