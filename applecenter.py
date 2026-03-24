@@ -34,7 +34,7 @@ products = [
         "name": "AirPods 4",
         "price": 1299,
         "category": "AirPods",
-        "image": "https://avatars.mds.yandex.net/i?id=f6b9fe5672c5d819ec4d890481faeb0a582798af-4216017-images-thumbs&n=13",  # buraya link əlavə et
+        "image": "https://www.apple.com/v/airpods-4/g/images/overview/bento-gallery/bento_case_close__f0fhueeeoy2q_xlarge_2x.jpg",  # buraya link əlavə et
         "colors": ["#e5e5ea","#a2845e","#000000"],
         "likes": 0
     }
