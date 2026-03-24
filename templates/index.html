@@ -1,52 +1,59 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AppleCenter</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background:#f5f5f7; font-family:-apple-system, system-ui, sans-serif; }
-        .nav-item { opacity: 0.8; transition: 0.3s; font-size: 12px; font-weight: 400; }
-        .nav-item:hover { opacity: 1; }
-        .product-card { background: white; border-radius: 24px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .product-card:hover { transform: scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
-    </style>
+<meta charset="UTF-8">
+<title>AppleCenter</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
 
-<nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
-    <div class="max-w-6xl mx-auto flex justify-between items-center px-6 py-3">
-        <a href="/"><img src="{{ url_for('static', filename='logo.png') }}" class="w-5 opacity-90"></a>
-        <div class="hidden md:flex space-x-10">
-            {% for cat in categories %}
-            <a href="/?cat={{cat}}" class="nav-item text-gray-700">{{cat}}</a>
-            {% endfor %}
-        </div>
-        <div class="flex space-x-5 items-center">
-            <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            <a href="/admin" class="text-[10px] bg-gray-100 px-2 py-1 rounded">Admin</a>
-        </div>
-    </div>
+<body class="bg-white text-black">
+
+<!-- NAV -->
+<nav class="bg-black text-white flex justify-between p-4 px-10">
+
+<div class="flex items-center gap-2">
+<img src="/static/logo.png" class="w-8">
+<span>AppleCenter</span>
+</div>
+
+<form action="/" method="GET">
+<input name="q" placeholder="Axtar..." class="p-2 rounded text-black">
+</form>
+
+<div class="flex gap-4">
+<button onclick="toggleDark()">🌙</button>
+<a href="/admin" class="opacity-20 hover:opacity-100">admin</a>
+</div>
+
 </nav>
 
-<header class="py-24 text-center">
-    <h1 class="text-7xl font-bold tracking-tighter text-gray-900">AppleCenter.</h1>
-    <p class="text-gray-500 mt-5 text-2xl font-light">The best way to buy the products you love.</p>
-</header>
+<!-- PRODUCTS -->
+<div class="grid md:grid-cols-3 gap-10 p-10">
+{% for p in products %}
+<div class="bg-gray-100 p-5 rounded-2xl text-center">
 
-<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-10 pb-20">
-    {% for p in products %}
-    <a href="/product/{{p.id}}" class="product-card p-12 flex flex-col items-center">
-        <div class="h-64 flex items-center mb-10">
-            <img src="{{p.image}}" class="max-h-full object-contain drop-shadow-lg">
-        </div>
-        <h2 class="text-2xl font-bold text-gray-900">{{p.name}}</h2>
-        <p class="text-gray-500 mt-3 text-lg">{{p.price}} AZN-dən</p>
-        <button class="mt-6 bg-[#007aff] text-white px-6 py-2 rounded-full text-sm font-medium hover:bg-[#0066cc]">Buy</button>
-    </a>
-    {% endfor %}
+<a href="/product/{{p.id}}">
+<img src="{{p.image}}" class="h-52 mx-auto">
+<h2 class="text-xl mt-3">{{p.name}}</h2>
+</a>
+
+<p class="text-gray-500">{{p.price}} AZN</p>
+
+<div class="flex justify-between mt-3">
+<a href="/wishlist/add/{{p.id}}">❤️ {{p.likes}}</a>
+<a href="/product/{{p.id}}">Bax</a>
 </div>
+
+</div>
+{% endfor %}
+</div>
+
+<script>
+function toggleDark(){
+document.body.classList.toggle("bg-black")
+document.body.classList.toggle("text-white")
+}
+</script>
 
 </body>
 </html>
