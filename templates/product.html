@@ -1,60 +1,81 @@
-<div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 py-10">
-    <div class="w-full md:w-1/2 space-y-6">
-        <div class="bg-[#f5f5f7] rounded-[30px] p-10 h-[550px] flex items-center justify-center relative">
-            <img id="main-display" src="{{product.images[0]}}" class="max-h-full object-contain transition-all duration-500">
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{product.name}}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background:#fff; font-family:-apple-system, sans-serif; }
+        .color-dot { width:35px; height:35px; border-radius:50%; border:2px solid #e5e7eb; cursor:pointer; padding:2px; transition: 0.2s; }
+        .color-dot.active { border-color:#007aff; transform: scale(1.1); }
+        .storage-card { border:2px solid #f5f5f7; border-radius:15px; padding:18px; cursor:pointer; transition: 0.3s; }
+        .storage-card.active { border-color:#007aff; background:#f0f7ff; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-12">
+    <div class="w-full md:w-1/2 space-y-4">
+        <div class="bg-[#f5f5f7] rounded-[30px] p-8 h-[500px] flex items-center justify-center overflow-hidden">
+            <img id="mainImg" src="{{product.images[0]}}" class="max-h-full object-contain transition-all duration-500">
         </div>
-        <div class="flex justify-center gap-3">
+        <div class="flex justify-center gap-3 overflow-x-auto py-2">
             {% for img in product.images %}
-            <img src="{{img.strip()}}" onclick="document.getElementById('main-display').src=this.src" 
-                 class="w-16 h-16 p-2 bg-white rounded-xl cursor-pointer border hover:border-blue-500 transition">
+            <img src="{{img}}" onclick="document.getElementById('mainImg').src=this.src" 
+                 class="w-20 h-20 p-2 bg-gray-50 rounded-xl cursor-pointer border border-transparent hover:border-blue-400">
             {% endfor %}
         </div>
     </div>
 
     <div class="w-full md:w-1/2 space-y-10">
         <header>
-            <h1 class="text-5xl font-bold tracking-tight">{{product.name}}</h1>
-            <p class="text-2xl text-gray-500 mt-2" id="price-display">{{product.price}} AZN</p>
+            <a href="/" class="text-blue-600 font-medium">← Mağazaya qayıt</a>
+            <h1 class="text-5xl font-bold tracking-tight mt-4 text-gray-900">{{product.name}}</h1>
+            <p class="text-3xl font-light text-gray-900 mt-2" id="priceTag">{{product.price}} AZN</p>
         </header>
 
+        {% if product.color_list %}
         <div>
-            <p class="text-sm font-bold mb-4">Rəng seçin</p>
+            <p class="text-xs font-bold text-gray-400 mb-4 uppercase tracking-widest">Rəng seçin</p>
             <div class="flex gap-4">
-                {% for color in product.color_list %}
-                <button onclick="selectColor(this)" class="w-10 h-10 rounded-full border-2 border-gray-200 ring-offset-2 hover:ring-2 ring-blue-400"
-                        style="background-color: {{color.strip()}};"></button>
+                {% for c in product.color_list %}
+                <div class="color-dot" onclick="selectItem(this, 'color-dot')" style="background:{{c.strip()}};"></div>
                 {% endfor %}
             </div>
         </div>
+        {% endif %}
 
+        {% if product.storage_list %}
         <div>
-            <p class="text-sm font-bold mb-4">Yaddaş seçin</p>
-            <div class="grid grid-cols-2 gap-4">
-                {% for storage in product.storage_list %}
-                <div onclick="updateFinalPrice(this, {{loop.index0}})" 
-                     class="storage-option border-2 border-gray-100 rounded-2xl p-5 cursor-pointer hover:border-blue-300 transition">
-                    <p class="font-bold text-lg">{{storage.strip()}}</p>
-                    <p class="text-xs text-gray-400">+{{loop.index0 * 200}} AZN</p>
+            <p class="text-xs font-bold text-gray-400 mb-4 uppercase tracking-widest">Yaddaş seçin</p>
+            <div class="grid grid-cols-1 gap-4">
+                {% for s in product.storage_list %}
+                <div class="storage-card flex justify-between items-center" onclick="updatePrice(this, {{loop.index0}})">
+                    <span class="text-xl font-bold">{{s.strip()}}</span>
+                    <span class="text-gray-500">+{{loop.index0 * 200}} AZN</span>
                 </div>
                 {% endfor %}
             </div>
         </div>
+        {% endif %}
 
-        <button class="w-full bg-[#007aff] text-white py-5 rounded-2xl text-xl font-bold hover:bg-blue-600 transition shadow-lg">
+        <button class="w-full bg-[#007aff] text-white py-5 rounded-2xl text-xl font-bold shadow-lg hover:bg-[#0066cc]">
             Sifariş et
         </button>
     </div>
 </div>
 
 <script>
-    function selectColor(el) {
-        document.querySelectorAll('button').forEach(b => b.classList.remove('ring-2'));
-        el.classList.add('ring-2');
+    let base = parseInt("{{product.price}}");
+    function selectItem(el, cls) {
+        document.querySelectorAll('.'+cls).forEach(i => i.classList.remove('active'));
+        el.classList.add('active');
     }
-    function updateFinalPrice(el, idx) {
-        document.querySelectorAll('.storage-option').forEach(o => o.classList.remove('border-blue-500', 'bg-blue-50'));
-        el.classList.add('border-blue-500', 'bg-blue-50');
-        let base = parseInt("{{product.price}}");
-        document.getElementById('price-display').innerText = (base + (idx * 200)) + " AZN";
+    function updatePrice(el, idx) {
+        selectItem(el, 'storage-card');
+        document.getElementById('priceTag').innerText = (base + (idx * 200)) + " AZN";
     }
 </script>
+</body>
+</html>
