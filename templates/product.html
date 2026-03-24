@@ -1,40 +1,82 @@
-<div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-12 py-10 px-6">
-    <div class="w-full md:w-1/2">
-        <div class="bg-[#f5f5f7] rounded-[30px] p-10 h-[500px] flex items-center justify-center">
-            <img id="mainImg" src="{{ product.images[0] }}" class="max-h-full object-contain transition-all duration-300">
-        </div>
-        
-        <div class="flex gap-4 mt-6 justify-center">
-            {% for img in product.images %}
-            <div class="w-20 h-20 bg-gray-100 rounded-xl p-2 cursor-pointer border hover:border-blue-500 transition"
-                 onclick="document.getElementById('mainImg').src='{{ img }}'">
-                <img src="{{ img }}" class="w-full h-full object-contain">
-            </div>
-            {% endfor %}
-        </div>
-    </div>
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<title>{{product.name}}</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-    <div class="w-full md:w-1/2 space-y-8">
-        <div>
-            <h1 class="text-5xl font-bold">{{ product.name }}</h1>
-            <p class="text-3xl font-light mt-4" id="displayPrice">{{ product.price }} AZN</p>
-        </div>
+<body class="p-10">
 
-        {% if product.color_list %}
-        <div>
-            <p class="text-sm font-bold text-gray-400 uppercase mb-4">Rəng seçin</p>
-            <div class="flex gap-3">
-                {% for color in product.color_list %}
-                <button class="w-10 h-10 rounded-full border-2 border-gray-200" 
-                        style="background-color: {{ color.strip() }};"
-                        onclick="this.parentElement.querySelectorAll('button').forEach(b => b.style.borderColor='#e5e7eb'); this.style.borderColor='#007aff';"></button>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
+<a href="/">← Geri</a>
 
-        <button class="w-full bg-[#007aff] text-white py-5 rounded-2xl text-xl font-bold shadow-lg">
-            Sifariş et
-        </button>
-    </div>
+<div class="grid md:grid-cols-2 gap-10 mt-10">
+
+<!-- IMAGE -->
+<div>
+<img id="mainImg" src="{{product.images[0]}}" class="h-96 mx-auto">
+
+<div class="flex gap-3 mt-5">
+{% for img in product.images %}
+<img src="{{img}}" onclick="change(this)" class="w-20 cursor-pointer">
+{% endfor %}
 </div>
+</div>
+
+<!-- INFO -->
+<div>
+<h1 class="text-4xl font-bold">{{product.name}}</h1>
+<p id="price" class="text-2xl mt-3">{{product.price}} AZN</p>
+
+<!-- COLORS -->
+<div class="mt-5">
+<p>Rəng seç:</p>
+<div class="flex gap-3 mt-2">
+{% for c in product.color_list %}
+<div onclick="select(this)" style="background:{{c}}"
+class="w-8 h-8 rounded-full border cursor-pointer"></div>
+{% endfor %}
+</div>
+</div>
+
+<!-- STORAGE -->
+<div class="mt-5">
+<p>Yaddaş:</p>
+<div class="flex gap-3 mt-2">
+{% for s in product.storage_list %}
+<div onclick="priceUpdate({{loop.index0}})" 
+class="border p-2 cursor-pointer">
+{{s}}
+</div>
+{% endfor %}
+</div>
+</div>
+
+<button class="bg-blue-600 text-white p-3 mt-6 rounded-xl w-full">
+Səbətə əlavə et
+</button>
+
+</div>
+
+</div>
+
+<script>
+let base = parseInt("{{product.price}}")
+
+function change(el){
+document.getElementById("mainImg").src = el.src
+}
+
+function select(el){
+document.querySelectorAll("div[onclick='select(this)']")
+.forEach(i=>i.style.border="")
+el.style.border="2px solid blue"
+}
+
+function priceUpdate(i){
+document.getElementById("price").innerText = (base + i*200) + " AZN"
+}
+</script>
+
+</body>
+</html>
