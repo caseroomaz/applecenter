@@ -2,48 +2,42 @@
 <html lang="az">
 <head>
     <meta charset="UTF-8">
+    <title>AppleCenter Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Admin Panel</title>
 </head>
-<body class="bg-gray-50 p-10">
-
-<div class="max-w-4xl mx-auto">
-    <h1 class="text-4xl font-bold mb-10">Admin Panel</h1>
-
-    <form action="/admin/add" method="POST" class="bg-white p-8 rounded-2xl shadow-sm space-y-4 mb-12">
-        <div class="grid md:grid-cols-2 gap-4">
-            <input name="name" placeholder="Məhsul adı" class="p-4 border rounded-xl" required>
-            <input name="price" type="number" placeholder="Qiymət (AZN)" class="p-4 border rounded-xl" required>
-        </div>
-        <input name="image" placeholder="Şəkil URL" class="w-full p-4 border rounded-xl" required>
+<body class="bg-gray-100 p-10">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8">Məhsul İdarəetməsi</h1>
         
-        <select name="category" class="w-full p-4 border rounded-xl bg-white">
-            <option value="iphone">iPhone</option>
-            <option value="airpods">AirPods</option>
-            <option value="mac">MacBook</option>
-        </select>
-
-        <input name="colors" placeholder="Rənglər (məs: black,silver,#f5f5f5)" class="w-full p-4 border rounded-xl">
-        <input name="storages" placeholder="Yaddaşlar (məs: 128GB,256GB)" class="w-full p-4 border rounded-xl">
-        
-        <button class="w-full bg-green-600 text-white p-4 rounded-xl font-bold">Məhsul Əlavə Et</button>
-    </form>
-
-    <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-        {% for p in products %}
-        <div class="flex items-center justify-between p-6 border-b">
-            <div class="flex items-center space-x-4">
-                <img src="{{p.image}}" class="w-12 h-12 object-contain">
-                <div>
-                    <p class="font-bold">{{p.name}}</p>
-                    <p class="text-sm text-gray-400">{{p.price}} AZN</p>
-                </div>
+        <form action="/admin/add" method="POST" class="bg-white p-8 rounded-3xl shadow-sm space-y-4 mb-10">
+            <div class="grid grid-cols-2 gap-4">
+                <input name="name" placeholder="Məhsul adı (məs: iPhone 17 Pro)" class="p-4 border rounded-xl" required>
+                <input name="price" type="number" placeholder="Qiymət (AZN)" class="p-4 border rounded-xl" required>
             </div>
-            <a href="/admin/delete/{{p.id}}" class="text-red-500 font-medium">Sil</a>
-        </div>
-        {% endfor %}
-    </div>
-</div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <input name="image" placeholder="Əsas şəkil URL" class="p-4 border rounded-xl" required>
+                <select name="category" class="p-4 border rounded-xl bg-white">
+                    <option>iPhone</option><option>iPad</option><option>AirPods</option>
+                    <option>Mac</option><option>Watch</option><option>Aksesuar</option>
+                </select>
+            </div>
 
+            <input name="colors" placeholder="Rənglər (məs: black,silver,gold)" class="w-full p-4 border rounded-xl">
+            <input name="storages" placeholder="Yaddaşlar (məs: 128GB,256GB,512GB)" class="w-full p-4 border rounded-xl">
+            <textarea name="description" placeholder="Məhsul haqqında məlumat" class="w-full p-4 border rounded-xl"></textarea>
+            
+            <button class="w-full bg-black text-white p-5 rounded-2xl font-bold">Məhsulu Bazaya Əlavə Et</button>
+        </form>
+
+        <div class="space-y-4">
+            {% for p in products %}
+            <div class="bg-white p-4 rounded-2xl flex justify-between items-center px-8">
+                <span class="font-bold">{{p.name}} ({{p.category}})</span>
+                <a href="/admin/delete/{{p.id}}" class="text-red-500 font-semibold">Sil</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </body>
 </html>
