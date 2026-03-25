@@ -31,7 +31,7 @@ products = [
         "price": 2699,
         "category": "iPhone",
         "images": [
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-unselect-gallery-1-202509_GEO_EMEA_FMT_WHH?wid=1280&hei=492&fmt=p-jpg&qlt=80&.v=WGdCRlQ0YVlqbTdXTEkxRnVQb0oxdFgrSXpWVEhWaW9YTGlWRHFoSHU0OGVVRGcwVkxmNk9rdGtMbGV1WEU3aFZZSzFRaUtHWkpsNVFjaGNKTGxvT0ZLUVUycEJya0hsWFBUR0JtbjFSclN0TXdmWG8wSkNlbUlGSE83REJnTFZaaWlNWWJIcGw4RzFQTGcydjBMTWZB&traceId=1",
+            "https://www.apple.com/v/iphone-17/e/images/overview/welcome/hero_startframe__e9e7pcnguyqi_xlarge.jpg",
             "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-select-202509-black_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=WGdCRlQ0YVlqbTdXTEkxRnVQb0oxa3pYQjBteGp2cFFHL09TNGhVUUhxeHFkSUJZcmNjVXZ4cDk3YTVMcWk4SHF2TWlpSzUzejRCZGt2SjJUNGl1VEE4bm1RcmlWRWp2eDN1WHNkSjNmUlkwQ2hTNHZjREFYdVBRanJ6N1p0WHI&traceId=1",
             "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-select-202509-white_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=WGdCRlQ0YVlqbTdXTEkxRnVQb0oxclZmSzgzdlhzQS95ekpRalhXU0JMVkRQR0pzaFhHemZ3ZzZNcDlHRHpJYnF2TWlpSzUzejRCZGt2SjJUNGl1VEE4bm1RcmlWRWp2eDN1WHNkSjNmUmFBdlBzZ01jTzlOOGhYc3dpcENYM2Y&traceId=1",
             "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-select-202509-lavender_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=WGdCRlQ0YVlqbTdXTEkxRnVQb0oxbGoraU1aeXdWbEh0SUtyMmtxWGg5dUpDNHBIcmowQ3VoNVJwTm5xckpDV2xjZnhHRHJyenVmME5KTm9Sd1ZaU3NqbWRhTGpRM2xxVWJRWUhSaDlCQ3FTZnZjRTZTT0R6VFJnZ01JbHJqd0hlODBad1VqYUZ3RW54YkRKL2hzbXVR&traceId=1",
