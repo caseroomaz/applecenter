@@ -16,7 +16,12 @@ products = [
         "name": "iPhone 17 Pro Max",
         "price": 3499,
         "category": "iPhone",
-        "image": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=NUNzdzNKR0FJbmhKWm5YamRHb05tUzkyK3hWak1ybHhtWDkwUXVINFc0RkZqUFNQc3E5VDh2SEx1ZlJpSjNkR0FOL1haWCt6TDJ0UWlLb09XajVNdENYR1ZZZnEyMVlVQUliTThGMjNyaFFxbm9iakpBWkhjT1hBM3BZeU9zQ0JzNmlxRHcrTG16TVFTaEZGMjZVM3ZB&traceId=1",
+        "images": [
+            "/static/iphone17pro_front.png",
+            "/static/iphone17pro_back.png",
+            "/static/iphone17pro_top.png",
+            "/static/iphone17pro_side.png"
+        ],
         "colors": ["#1c1c1e","#f5f5f7","#d4af37"],
         "likes": 0
     },
@@ -25,7 +30,11 @@ products = [
         "name": "iPhone 17",
         "price": 2699,
         "category": "iPhone",
-        "image": "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-unselect-gallery-1-202509_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=WGdCRlQ0YVlqbTdXTEkxRnVQb0oxdFgrSXpWVEhWaW9YTGlWRHFoSHU0OUFxWTdCbFhxa0dhaGFmNkNjSWxSb0FOL1haWCt6TDJ0UWlLb09XajVNdENYR1ZZZnEyMVlVQUliTThGMjNyaFN4MTNVU0FrSGRPbjQxdTdMMFNTYTBnWTRGR2xpS0I2cnhMYzZYallpSnFB&traceId=1",
+        "images": [
+            "/static/iphone17_front.png",
+            "/static/iphone17_back.png",
+            "/static/iphone17_top.png"
+        ],
         "colors": ["#3a3a3c","#ffd1dc","#c7fcec"],
         "likes": 0
     },
@@ -34,17 +43,20 @@ products = [
         "name": "AirPods 4",
         "price": 1299,
         "category": "AirPods",
-        "image": "https://www.apple.com/v/airpods-4/g/images/overview/bento-gallery/bento_case_close__f0fhueeeoy2q_xlarge_2x.jpg",
+        "images": [
+            "/static/airpods4_front.png",
+            "/static/airpods4_case.png"
+        ],
         "colors": ["#e5e5ea","#a2845e","#000000"],
         "likes": 0
     }
 ]
 
+cart_items = []
+
 # -----------------------------------
 # Səbət sistemi
 # -----------------------------------
-cart_items = []
-
 @app.route("/cart")
 def cart():
     total = sum(item['price'] for item in cart_items)
@@ -80,7 +92,6 @@ def category(cat):
 @app.route("/product/<int:id>")
 def product(id):
     p = next((x for x in products if x["id"] == id), products[0])
-    p["images"] = [p["image"], p["image"], p["image"]]  # Demo üçün eyni şəkil
     p["storage_list"] = ["128GB","256GB","512GB"]
     return render_template("product.html", product=p)
 
@@ -116,7 +127,7 @@ def add_product():
         "id": new_id,
         "name": request.form["name"],
         "price": int(request.form["price"]),
-        "image": request.form["image"],
+        "images": [request.form["image"]],
         "category": request.form.get("category","Other"),
         "colors": ["#000","#fff"],
         "likes":0
