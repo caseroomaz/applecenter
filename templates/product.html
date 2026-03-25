@@ -7,13 +7,18 @@
 </head>
 <body class="p-10">
 
-<a href="/">← Geri</a>
+<a href="/">← Ana səhifəyə qayıt</a>
 
 <div class="grid md:grid-cols-2 gap-10 mt-10">
 
-<!-- IMAGE -->
+<!-- IMAGE SLIDER -->
 <div>
-<img id="mainImg" src="{{product.image}}" class="h-96 mx-auto">
+<img id="mainImg" src="{{product.images[0]}}" class="h-96 mx-auto rounded-xl shadow-md">
+<div class="flex justify-center gap-2 mt-3">
+  {% for img in product.images %}
+    <img onclick="showImage('{{img}}')" src="{{img}}" class="h-16 cursor-pointer border rounded-md">
+  {% endfor %}
+</div>
 </div>
 
 <!-- INFO -->
@@ -26,7 +31,7 @@
 <p class="text-sm text-gray-500">Rəng seç</p>
 <div class="flex gap-3 mt-3">
 {% for c in product.colors %}
-<div onclick="selectColor(this)"
+<div onclick="selectColor(this,{{loop.index0}})"
 style="background:{{c}}"
 class="w-10 h-10 rounded-full border cursor-pointer"></div>
 {% endfor %}
@@ -52,15 +57,22 @@ class="border p-3 rounded-lg cursor-pointer">{{s}}</div>
 </div>
 
 <script>
-let base = parseInt("{{product.price}}")
+let base = parseInt("{{product.price}}");
 
-function selectColor(el){
-document.querySelectorAll("div[onclick='selectColor(this)']").forEach(i=>i.style.border="")
-el.style.border="2px solid blue"
+function showImage(src){
+    document.getElementById("mainImg").src = src;
+}
+
+function selectColor(el, idx){
+    document.querySelectorAll("div[onclick^='selectColor']").forEach(i=>i.style.border="");
+    el.style.border="2px solid blue";
+    // rəngə uyğun şəkillər
+    let imgs = {{product.images | tojson}};
+    document.getElementById("mainImg").src = imgs[0]; // default olaraq birinci şəkil
 }
 
 function priceUpdate(i){
-document.getElementById("price").innerText = (base + i*200) + " AZN"
+    document.getElementById("price").innerText = (base + i*200) + " AZN";
 }
 </script>
 
