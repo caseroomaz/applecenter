@@ -2,51 +2,97 @@
 <html lang="az">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AppleCenter | Premium Store</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-[#fbfbfd]">
+
+<body class="bg-[#fbfbfd] font-sans">
 
 <!-- NAV -->
-<div class="flex justify-between items-center p-6 bg-black text-white">
-<div class="flex items-center gap-2">
-<img src="/static/logo.png" class="w-8 h-8">
-<span class="font-bold text-lg">AppleCenter</span>
+<div class="flex justify-between items-center p-4 md:p-6 bg-black text-white sticky top-0 z-50">
+
+    <!-- LOGO -->
+    <a href="/" class="flex items-center gap-2">
+        <img src="/static/logo.png" class="w-8 h-8">
+        <span class="font-bold text-lg">AppleCenter</span>
+    </a>
+
+    <!-- DESKTOP MENU -->
+    <div class="hidden md:flex gap-6 text-sm">
+        <a href="/category/iPhone" class="hover:text-gray-300">iPhone</a>
+        <a href="/category/iPad" class="hover:text-gray-300">iPad</a>
+        <a href="/category/Mac" class="hover:text-gray-300">Mac</a>
+        <a href="/category/Watch" class="hover:text-gray-300">Watch</a>
+        <a href="/category/AirPods" class="hover:text-gray-300">AirPods</a>
+        <a href="/category/Aksesuar" class="hover:text-gray-300">Aksesuar</a>
+    </div>
+
+    <!-- SEARCH -->
+    <form action="/" method="GET" class="hidden md:block">
+        <input name="q" placeholder="Search..." 
+        class="px-3 py-1 rounded text-black text-sm">
+    </form>
+
+    <!-- CART -->
+    <a href="/cart" class="text-xl">🛒</a>
+
+    <!-- HAMBURGER -->
+    <button class="md:hidden text-2xl ml-3" onclick="toggleMenu()">☰</button>
+
 </div>
 
-<div class="hidden md:flex gap-6">
-<a href="/category/iPhone">iPhone</a>
-<a href="/category/iPad">iPad</a>
-<a href="/category/Mac">Mac</a>
-<a href="/category/Watch">Watch</a>
-<a href="/category/AirPods">AirPods</a>
-<a href="/category/Aksesuar">Aksesuar</a>
-</div>
+<!-- MOBILE MENU -->
+<div id="mobileMenu" class="hidden flex flex-col bg-black text-white px-6 py-4 space-y-4 md:hidden">
+
+    <!-- SEARCH (mobile) -->
+    <form action="/" method="GET">
+        <input name="q" placeholder="Search..." 
+        class="w-full px-3 py-2 rounded text-black">
+    </form>
+
+    <a href="/category/iPhone">iPhone</a>
+    <a href="/category/iPad">iPad</a>
+    <a href="/category/Mac">Mac</a>
+    <a href="/category/Watch">Watch</a>
+    <a href="/category/AirPods">AirPods</a>
+    <a href="/category/Aksesuar">Aksesuar</a>
+
 </div>
 
 <!-- HERO -->
-<div class="text-center py-20">
-<h1 class="text-5xl font-bold">Apple Center</h1>
-<p class="text-gray-500 mt-2">Premium texnologiya</p>
+<div class="text-center py-16 md:py-20 px-4">
+    <h1 class="text-3xl md:text-5xl font-bold">Apple Center</h1>
+    <p class="text-gray-500 mt-2 text-sm md:text-base">Premium texnologiya</p>
 </div>
 
 <!-- PRODUCTS -->
-<div class="grid md:grid-cols-3 gap-10 px-10 pb-20">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 px-6 md:px-10 pb-20">
 {% for p in products %}
-<div class="bg-white p-6 text-center rounded-xl shadow-md">
-<img src="{{p.image}}" class="h-60 mx-auto">
-<h2 class="text-xl font-semibold mt-4">{{p.name}}</h2>
-<p class="text-gray-500">{{p.price}} AZN</p>
+<div class="bg-white p-6 text-center rounded-2xl shadow-md hover:shadow-xl transition duration-300">
 
-<!-- FAVORITE -->
-<p class="mt-2 text-red-500 cursor-pointer">
-<a href="/wishlist/add/{{p.id}}">❤️ {{p.likes}}</a>
-</p>
+    <img src="{{p.image}}" class="h-48 md:h-60 mx-auto object-contain">
 
-<a href="/product/{{p.id}}" class="mt-4 block bg-blue-600 text-white p-2 rounded-lg">Bax</a>
+    <h2 class="text-lg md:text-xl font-semibold mt-4">{{p.name}}</h2>
+    <p class="text-gray-500">{{p.price}} AZN</p>
+
+    <!-- BUTTON -->
+    <a href="/product/{{p.id}}" 
+       class="mt-4 block bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-xl transition">
+        Bax
+    </a>
+
 </div>
 {% endfor %}
 </div>
+
+<!-- SCRIPT -->
+<script>
+function toggleMenu(){
+    let menu = document.getElementById("mobileMenu");
+    menu.classList.toggle("hidden");
+}
+</script>
 
 </body>
 </html>
