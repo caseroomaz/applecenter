@@ -14,7 +14,7 @@ products = [
     {
         "id": 1,
         "name": "iPhone 17 Pro Max",
-        "price": 3499,
+        "price": 3199,
         "category": "iPhone",
         "images": [
             "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=NUNzdzNKR0FJbmhKWm5YamRHb05tUzkyK3hWak1ybHhtWDkwUXVINFc0RkZqUFNQc3E5VDh2SEx1ZlJpSjNkR0FOL1haWCt6TDJ0UWlLb09XajVNdENYR1ZZZnEyMVlVQUliTThGMjNyaFFxbm9iakpBWkhjT1hBM3BZeU9zQ0JzNmlxRHcrTG16TVFTaEZGMjZVM3ZB&traceId=1",
@@ -28,7 +28,7 @@ products = [
     {
         "id": 2,
         "name": "iPhone 17",
-        "price": 2699,
+        "price": 2249,
         "category": "iPhone",
         "images": [
             "https://www.apple.com/v/iphone-17/e/images/overview/welcome/hero_startframe__e9e7pcnguyqi_xlarge.jpg",
@@ -45,7 +45,7 @@ products = [
     {
         "id": 3,
         "name": "AirPods 4",
-        "price": 1299,
+        "price": 349,
         "category": "AirPods",
         "images": [
             "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-4-anc-select-202409_FV1?wid=976&hei=916&fmt=jpeg&qlt=90&.v=Qklmb1JJend3cVIxSUxIeFBIRk96cUNGMHVRUVpqOEFiUFU4R0xNRVFxdkhJa2hkRmxkTlJIMk9SdFNSaWFNODE1UUxLT2t0cW42N3FvQzVqaGhrVVcvdmFyQU52eG9rbk9Lb1pmQWN1MGgrYWpGdS9XeFgvbS9ITnNYOEhYaG4"
