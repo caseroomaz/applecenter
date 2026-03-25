@@ -2,45 +2,52 @@
 <html lang="az">
 <head>
 <meta charset="UTF-8">
+<title>{{product.name}}</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="p-10">
 
-<body class="bg-white p-6 md:p-16">
+<!-- Logo & Home -->
+<a href="/" class="text-blue-600">← Ana səhifəyə</a>
 
-<a href="/" class="text-blue-500">← Geri</a>
+<div class="grid md:grid-cols-2 gap-10 mt-10">
 
-<div class="grid md:grid-cols-2 gap-12 mt-10">
-
+<!-- IMAGE -->
 <div>
-<img id="mainImg" src="{{product.image}}" class="h-96 mx-auto transition hover:scale-105">
+<img id="mainImg" src="{{product.image}}" class="h-96 mx-auto">
 </div>
 
+<!-- INFO -->
 <div>
 <h1 class="text-4xl font-bold">{{product.name}}</h1>
 <p id="price" class="text-2xl mt-3">{{product.price}} AZN</p>
 
+<!-- COLORS -->
 <div class="mt-6">
-<p class="text-gray-500">Rəng</p>
-<div class="flex gap-3 mt-2">
+<p class="text-sm text-gray-500">Rəng seç</p>
+<div class="flex gap-3 mt-3">
 {% for c in product.colors %}
-<div onclick="selectColor(this)" style="background:{{c}}" class="w-10 h-10 rounded-full border cursor-pointer"></div>
+<div onclick="selectColor(this)"
+style="background:{{c}}"
+class="w-10 h-10 rounded-full border cursor-pointer"></div>
 {% endfor %}
 </div>
 </div>
 
+<!-- STORAGE -->
 <div class="mt-6">
-<p class="text-gray-500">Yaddaş</p>
-<div class="flex gap-3 mt-2">
+<p class="text-sm text-gray-500">Yaddaş</p>
+<div class="flex gap-3 mt-3">
 {% for s in product.storage_list %}
-<div onclick="priceUpdate({{loop.index0}})" class="border p-3 rounded-lg cursor-pointer">{{s}}</div>
+<div onclick="priceUpdate({{loop.index0}})"
+class="border p-3 rounded-lg cursor-pointer">{{s}}</div>
 {% endfor %}
 </div>
 </div>
 
-<a href="/cart/add/{{product.id}}" 
-class="block bg-blue-600 text-white p-4 mt-8 rounded-xl text-center">
+<button class="bg-blue-600 text-white p-3 mt-8 rounded-xl w-full">
 Səbətə əlavə et
-</a>
+</button>
 
 </div>
 </div>
@@ -49,7 +56,7 @@ Səbətə əlavə et
 let base = parseInt("{{product.price}}")
 
 function selectColor(el){
-document.querySelectorAll(".color").forEach(i=>i.style.border="")
+document.querySelectorAll("div[onclick='selectColor(this)']").forEach(i=>i.style.border="")
 el.style.border="2px solid blue"
 }
 
