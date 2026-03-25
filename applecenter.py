@@ -7,7 +7,7 @@ app.secret_key = "applecenter_2026_premium_key"
 ADMIN_USER = "admin"
 ADMIN_PASS = "1234"
 
-# -----------------------------------
+# -----------------------------------s
 # Məhsullar
 # -----------------------------------
 products = [
