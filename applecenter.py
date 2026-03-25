@@ -41,6 +41,23 @@ products = [
 ]
 
 # -----------------------------------
+# Səbət sistemi
+# -----------------------------------
+cart_items = []
+
+@app.route("/cart")
+def cart():
+    total = sum(item['price'] for item in cart_items)
+    return render_template("cart.html", cart_items=cart_items, total=total)
+
+@app.route("/cart/add/<int:id>")
+def cart_add(id):
+    p = next((x for x in products if x["id"] == id), None)
+    if p:
+        cart_items.append(p)
+    return redirect("/cart")
+
+# -----------------------------------
 # Ana səhifə
 # -----------------------------------
 @app.route("/")
@@ -101,7 +118,7 @@ def add_product():
         "price": int(request.form["price"]),
         "image": request.form["image"],
         "category": request.form.get("category","Other"),
-        "colors": ["#000","#fff"],  # default colors
+        "colors": ["#000","#fff"],
         "likes":0
     })
     return redirect("/admin")
