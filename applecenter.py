@@ -22,7 +22,7 @@ products = [
             "/static/iphone17pro_top.png",
             "/static/iphone17pro_side.png"
         ],
-        "colors": ["#1c1c1e","#f5f5f7","#d4af37"],
+        "colors": ["#1c1c1e","#f5f5f7","#FF8C00"],
         "likes": 0
     },
     {
