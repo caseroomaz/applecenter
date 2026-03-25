@@ -22,7 +22,7 @@ products = [
             "/static/iphone17pro_top.png",
             "/static/iphone17pro_side.png"
         ],
-        "colors": ["#1c1c1e","#f5f5f7","#FF8C00"],
+        "colors": ["#f5f5f7","#0A1F44","#FF8C00"],
         "likes": 0
     },
     {
@@ -35,7 +35,7 @@ products = [
             "/static/iphone17_back.png",
             "/static/iphone17_top.png"
         ],
-        "colors": ["#3a3a3c","#ffd1dc","#c7fcec"],
+        "colors": ["#3a3a3c","#f5f5f7","#E6E6FA","#9CAF88","#A9C6D8"],
         "likes": 0
     },
     {
@@ -47,7 +47,6 @@ products = [
             "/static/airpods4_front.png",
             "/static/airpods4_case.png"
         ],
-        "colors": ["#e5e5ea","#a2845e","#000000"],
         "likes": 0
     }
 ]
