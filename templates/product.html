@@ -5,53 +5,53 @@
 <title>{{product.name}}</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="p-10">
+<body class="p-10 bg-[#fbfbfd]">
 
-<a href="/">← Ana səhifəyə qayıt</a>
+<a href="/" class="text-blue-600 hover:underline">← Ana səhifəyə qayıt</a>
 
 <div class="grid md:grid-cols-2 gap-10 mt-10">
 
 <!-- IMAGE SLIDER -->
 <div>
-<img id="mainImg" src="{{product.images[0]}}" class="h-96 mx-auto rounded-xl shadow-md">
-<div class="flex justify-center gap-2 mt-3">
-  {% for img in product.images %}
-    <img onclick="showImage('{{img}}')" src="{{img}}" class="h-16 cursor-pointer border rounded-md">
-  {% endfor %}
-</div>
+    <img id="mainImg" src="{{product.images[0]}}" class="h-96 mx-auto rounded-xl shadow-md object-contain">
+    <div class="flex justify-center gap-2 mt-3">
+      {% for img in product.images %}
+        <img onclick="showImage('{{img}}')" src="{{img}}" class="h-16 cursor-pointer border rounded-md hover:border-blue-500 transition">
+      {% endfor %}
+    </div>
 </div>
 
 <!-- INFO -->
 <div>
-<h1 class="text-4xl font-bold">{{product.name}}</h1>
-<p id="price" class="text-2xl mt-3">{{product.price}} AZN</p>
+    <h1 class="text-4xl font-bold">{{product.name}}</h1>
+    <p id="price" class="text-2xl mt-3">{{product.price}} AZN</p>
 
-<!-- COLORS -->
-<div class="mt-6">
-<p class="text-sm text-gray-500">Rəng seç</p>
-<div class="flex gap-3 mt-3">
-{% for c in product.colors %}
-<div onclick="selectColor(this,{{loop.index0}})"
-style="background:{{c}}"
-class="w-10 h-10 rounded-full border cursor-pointer"></div>
-{% endfor %}
-</div>
-</div>
+    <!-- COLORS -->
+    <div class="mt-6">
+        <p class="text-sm text-gray-500">Rəng seç</p>
+        <div class="flex gap-3 mt-3">
+        {% for c in product.colors %}
+            <div onclick="selectColor(this,{{loop.index0}})"
+                 style="background:{{c}}"
+                 class="w-10 h-10 rounded-full border cursor-pointer hover:border-blue-500 transition"></div>
+        {% endfor %}
+        </div>
+    </div>
 
-<!-- STORAGE -->
-<div class="mt-6">
-<p class="text-sm text-gray-500">Yaddaş</p>
-<div class="flex gap-3 mt-3">
-{% for s in product.storage_list %}
-<div onclick="priceUpdate({{loop.index0}})"
-class="border p-3 rounded-lg cursor-pointer">{{s}}</div>
-{% endfor %}
-</div>
-</div>
+    <!-- STORAGE -->
+    <div class="mt-6">
+        <p class="text-sm text-gray-500">Yaddaş</p>
+        <div class="flex gap-3 mt-3">
+        {% for s in product.storage_list %}
+            <div onclick="priceUpdate({{loop.index0}})"
+                 class="border p-3 rounded-lg cursor-pointer hover:border-blue-500 transition">{{s}}</div>
+        {% endfor %}
+        </div>
+    </div>
 
-<button class="bg-blue-600 text-white p-3 mt-8 rounded-xl w-full">
-<a href="/cart/add/{{product.id}}">Səbətə əlavə et</a>
-</button>
+    <button class="bg-blue-600 text-white p-3 mt-8 rounded-xl w-full hover:bg-blue-700 transition">
+        <a href="/cart/add/{{product.id}}">Səbətə əlavə et</a>
+    </button>
 
 </div>
 </div>
@@ -59,18 +59,21 @@ class="border p-3 rounded-lg cursor-pointer">{{s}}</div>
 <script>
 let base = parseInt("{{product.price}}");
 
+// Şəkil slider
 function showImage(src){
     document.getElementById("mainImg").src = src;
 }
 
+// Rəng seçimi
 function selectColor(el, idx){
     document.querySelectorAll("div[onclick^='selectColor']").forEach(i=>i.style.border="");
     el.style.border="2px solid blue";
-    // rəngə uyğun şəkillər
+    // rəngə uyğun şəkillər (indiki versiya sadəcə default olaraq ilk şəkili göstərir)
     let imgs = {{product.images | tojson}};
-    document.getElementById("mainImg").src = imgs[0]; // default olaraq birinci şəkil
+    document.getElementById("mainImg").src = imgs[0];
 }
 
+// Yaddaş seçimi → qiymət yenilənir
 function priceUpdate(i){
     document.getElementById("price").innerText = (base + i*200) + " AZN";
 }
