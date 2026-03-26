@@ -55,6 +55,9 @@ products = [
 
 cart_items = []
 
+# -------------------------------
+# ROUTES
+# -------------------------------
 @app.route("/")
 def home():
     q = request.args.get("q")
@@ -87,6 +90,9 @@ def cart_add(id):
         cart_items.append(p)
     return redirect("/cart")
 
+# -------------------------------
+# ADMIN ROUTES
+# -------------------------------
 @app.route("/admin/login", methods=["GET","POST"])
 def admin_login():
     if request.method=="POST":
@@ -125,4 +131,7 @@ def delete_product(id):
     products = [p for p in products if p["id"] != id]
     return redirect("/admin")
 
+# -------------------------------
+# APPLICATION ENTRY
+# -------------------------------
 application = app
