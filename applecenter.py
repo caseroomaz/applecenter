@@ -13,8 +13,8 @@ products = [
         "price": 3199,
         "category": "iPhone",
         "images": [
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch_GEO_US?wid=5120",
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch_AV1?wid=5120"
+            "https://store.storeimages.cdn-apple.com/iphone1.jpg",
+            "https://store.storeimages.cdn-apple.com/iphone2.jpg"
         ],
         "colors": ["#f5f5f7","#0A1F44","#FF8C00"],
         "likes": 0
@@ -25,7 +25,7 @@ products = [
         "price": 2249,
         "category": "iPhone",
         "images": [
-            "https://www.apple.com/v/iphone-17/e/images/overview/welcome/hero_startframe__e9e7pcnguyqi_xlarge.jpg"
+            "https://www.apple.com/iphone.jpg"
         ],
         "colors": ["#3a3a3c","#f5f5f7"],
         "likes": 0
@@ -36,7 +36,7 @@ products = [
         "price": 349,
         "category": "AirPods",
         "images": [
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-4-anc-select-202409_FV1?wid=976"
+            "https://store.storeimages.cdn-apple.com/airpods.jpg"
         ],
         "likes": 0
     }
@@ -44,23 +44,33 @@ products = [
 
 cart_items = []
 
+# ANA SƏHİFƏ
 @app.route("/")
 def home():
     q = request.args.get("q")
     filtered = [p for p in products if q.lower() in p["name"].lower()] if q else products
     return render_template("index.html", products=filtered)
 
+# KATEQORİYA
 @app.route("/category/<cat>")
 def category(cat):
     filtered = [p for p in products if p["category"] == cat]
     return render_template("index.html", products=filtered)
 
+# PRODUCT
 @app.route("/product/<int:id>")
 def product(id):
     p = next((x for x in products if x["id"] == id), products[0])
-    p["storage_list"] = ["128GB","256GB","512GB"]
+
+    # 🔥 ƏLAVƏ (storage yalnız uyğun məhsullar üçün)
+    if p["category"] != "AirPods":
+        p["storage_list"] = ["128GB","256GB","512GB"]
+    else:
+        p["storage_list"] = []
+
     return render_template("product.html", product=p)
 
+# CART
 @app.route("/cart")
 def cart():
     total = sum(item['price'] for item in cart_items)
@@ -73,6 +83,7 @@ def cart_add(id):
         cart_items.append(p)
     return redirect("/cart")
 
+# ADMIN LOGIN
 @app.route("/admin/login", methods=["GET","POST"])
 def admin_login():
     if request.method=="POST":
@@ -81,17 +92,21 @@ def admin_login():
             return redirect("/admin")
     return render_template("admin_login.html")
 
+# ADMIN PANEL
 @app.route("/admin")
 def admin():
     if "admin" not in session:
         return redirect("/admin/login")
     return render_template("admin.html", products=products)
 
+# ADD PRODUCT
 @app.route("/admin/add", methods=["POST"])
 def add_product():
     if "admin" not in session:
         return redirect("/admin/login")
+
     new_id = max([p["id"] for p in products]) + 1 if products else 1
+
     products.append({
         "id": new_id,
         "name": request.form["name"],
@@ -101,8 +116,10 @@ def add_product():
         "colors": ["#000","#fff"],
         "likes":0
     })
+
     return redirect("/admin")
 
+# DELETE
 @app.route("/admin/delete/<int:id>")
 def delete_product(id):
     global products
