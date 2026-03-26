@@ -7,9 +7,7 @@ app.secret_key = "applecenter_2026_premium_key"
 ADMIN_USER = "admin"
 ADMIN_PASS = "1234"
 
-# -----------------------------------
-# Məhsullar (ORİJİNAL DATA TAM SAXLANIB)
-# -----------------------------------
+# Mövcud məhsullar (heç bir şey silinməyib)
 products = [
     {
         "id": 1,
@@ -17,8 +15,10 @@ products = [
         "price": 3199,
         "category": "iPhone",
         "images": [
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=NUNzdzNKR0FJbmhKWm5YamRHb05tUzkyK3hWak1ybHhtWDkwUXVINFc0RkZqUFNQc3E5VDh2SEx1ZlJpSjNkR0FOL1haWCt6TDJ0UWlLb09XajVNdENYR1ZZZnEyMVlVQUliTThGMjNyaFFxbm9iakpBWkhjT1hBM3BZeU9zQ0JzNmlxRHcrTG16TVFTaEZGMjZVM3ZB&traceId=1",
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch_AV1?wid=5120&hei=2880&fmt=webp&qlt=90&.v=NUNzdzNKR0FJbmhKWm5YamRHb05tUzkyK3hWak1ybHhtWDkwUXVINFc0RUNxZ2Y2UndFVkhoZG1DQ0NWVTFWa2xjZnhHRHJyenVmME5KTm9Sd1ZaU3NqbWRhTGpRM2xxVWJRWUhSaDlCQ3E0aFZQSlZXTG00RTR2aXlYRzBpVUxlODBad1VqYUZ3RW54YkRKL2hzbXVR&traceId=1"
+            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90",
+            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch_AV1?wid=5120&hei=2880&fmt=webp&qlt=90",
+            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch-deepblue?wid=5120&hei=2880&fmt=webp&qlt=90",
+            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch-silver?wid=5120&hei=2880&fmt=webp&qlt=90"
         ],
         "colors": ["#f5f5f7","#0A1F44","#FF8C00"],
         "likes": 0
@@ -29,7 +29,12 @@ products = [
         "price": 2249,
         "category": "iPhone",
         "images": [
-            "https://www.apple.com/v/iphone-17/e/images/overview/welcome/hero_startframe__e9e7pcnguyqi_xlarge.jpg"
+            "https://www.apple.com/v/iphone-17/e/images/overview/welcome/hero_startframe__e9e7pcnguyqi_xlarge.jpg",
+            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-select-202509-black_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90",
+            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-select-202509-white_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90",
+            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-select-202509-lavender_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90",
+            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-select-202509-sage_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90",
+            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-select-202509-mistblue_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90"
         ],
         "colors": ["#3a3a3c","#f5f5f7","#E6E6FA","#9CAF88","#A9C6D8"],
         "likes": 0
@@ -49,10 +54,7 @@ products = [
 
 cart_items = []
 
-# -----------------------------------
-# PUBLIC ROUTES
-# -----------------------------------
-
+# ---------- PUBLIC ROUTES ----------
 @app.route("/")
 def home():
     q = request.args.get("q")
@@ -85,10 +87,7 @@ def cart_add(id):
         cart_items.append(p)
     return redirect("/cart")
 
-# -----------------------------------
-# ADMIN ROUTES
-# -----------------------------------
-
+# ---------- ADMIN ROUTES ----------
 @app.route("/admin/login", methods=["GET","POST"])
 def admin_login():
     if request.method=="POST":
@@ -109,10 +108,11 @@ def admin():
 def add_product():
     if "admin" not in session:
         return redirect("/admin/login")
-
     new_id = max([p["id"] for p in products]) + 1 if products else 1
-    images = request.form.getlist("images[]")  # bir neçə şəkil əlavə etmək üçün
-    colors = request.form.getlist("colors[]")  # bir neçə rəng əlavə etmək üçün
+
+    images = request.form.getlist("images[]")
+    colors = request.form.getlist("colors[]")
+    
     products.append({
         "id": new_id,
         "name": request.form["name"],
