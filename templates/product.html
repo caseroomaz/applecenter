@@ -5,20 +5,18 @@
 <title>{{product.name}}</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
 <body class="p-10 bg-[#fbfbfd]">
 
 <a href="/" class="text-blue-600 hover:underline">← Ana səhifəyə qayıt</a>
 
 <div class="grid md:grid-cols-2 gap-10 mt-10">
 
-<!-- IMAGE -->
+<!-- IMAGE SLIDER -->
 <div>
     <img id="mainImg" src="{{product.images[0]}}" class="h-96 mx-auto rounded-xl shadow-md object-contain">
-
     <div class="flex justify-center gap-2 mt-3">
       {% for img in product.images %}
-        <img onclick="showImage('{{img}}')" src="{{img}}" class="h-16 cursor-pointer border rounded-md hover:border-blue-500">
+        <img onclick="showImage('{{img}}')" src="{{img}}" class="h-16 cursor-pointer border rounded-md hover:border-blue-500 transition">
       {% endfor %}
     </div>
 </div>
@@ -26,7 +24,6 @@
 <!-- INFO -->
 <div>
     <h1 class="text-4xl font-bold">{{product.name}}</h1>
-
     <p id="price" class="text-2xl mt-3">{{product.price}} AZN</p>
 
     <!-- COLORS -->
@@ -34,9 +31,9 @@
         <p class="text-sm text-gray-500">Rəng seç</p>
         <div class="flex gap-3 mt-3">
         {% for c in product.colors %}
-            <div onclick="selectColor(this,'{{c}}')"
+            <div onclick="selectColor(this,{{loop.index0}})"
                  style="background:{{c}}"
-                 class="w-10 h-10 rounded-full border cursor-pointer color-box"></div>
+                 class="w-10 h-10 rounded-full border cursor-pointer hover:border-blue-500 transition"></div>
         {% endfor %}
         </div>
     </div>
@@ -46,14 +43,14 @@
         <p class="text-sm text-gray-500">Yaddaş</p>
         <div class="flex gap-3 mt-3">
         {% for s in product.storage_list %}
-            <div onclick="priceUpdate({{loop.index0}},'{{s}}')"
-                 class="border p-3 rounded-lg cursor-pointer storage-box">{{s}}</div>
+            <div onclick="priceUpdate({{loop.index0}})"
+                 class="border p-3 rounded-lg cursor-pointer hover:border-blue-500 transition">{{s}}</div>
         {% endfor %}
         </div>
     </div>
 
-    <button onclick="addToCart()" class="bg-blue-600 text-white p-3 mt-8 rounded-xl w-full hover:bg-blue-700 transition">
-        Səbətə əlavə et
+    <button class="bg-blue-600 text-white p-3 mt-8 rounded-xl w-full hover:bg-blue-700 transition">
+        <a href="/cart/add/{{product.id}}">Səbətə əlavə et</a>
     </button>
 
 </div>
@@ -62,56 +59,20 @@
 <script>
 let base = parseInt("{{product.price}}");
 
-let selectedColor = "{{product.colors[0] if product.colors else ''}}";
-let selectedStorage = "";
-let finalPrice = base;
-
 function showImage(src){
     document.getElementById("mainImg").src = src;
 }
 
-// COLOR
-function selectColor(el,color){
-    selectedColor = color;
+function selectColor(el, idx){
+    document.querySelectorAll("div[onclick^='selectColor']").forEach(i=>i.style.border="");
+    el.style.border="2px solid blue";
 
-    document.querySelectorAll(".color-box").forEach(e=>{
-        e.style.border = "1px solid #ccc";
-    });
-
-    el.style.border = "2px solid blue";
+    let imgs = {{product.images | tojson}};
+    document.getElementById("mainImg").src = imgs[0];
 }
 
-// STORAGE + PRICE
-function priceUpdate(i,storage){
-    selectedStorage = storage;
-    finalPrice = base + (i * 200);
-
-    document.getElementById("price").innerText = finalPrice + " AZN";
-
-    document.querySelectorAll(".storage-box").forEach(e=>{
-        e.style.border = "1px solid #ccc";
-    });
-
-    event.target.style.border = "2px solid blue";
-}
-
-// ADD TO CART
-function addToCart(){
-    fetch("/cart/add", {
-        method: "POST",
-        headers: {
-            "Content-Type":"application/json"
-        },
-        body: JSON.stringify({
-            id: "{{product.id}}",
-            name: "{{product.name}}",
-            image: document.getElementById("mainImg").src,
-            price: finalPrice,
-            color: selectedColor,
-            storage: selectedStorage
-        })
-    })
-    .then(()=> window.location.href = "/cart");
+function priceUpdate(i){
+    document.getElementById("price").innerText = (base + i*200) + " AZN";
 }
 </script>
 
