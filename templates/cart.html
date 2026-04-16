@@ -5,34 +5,21 @@
 <title>Səbət</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
 <body class="p-10">
 
 <h1 class="text-4xl font-bold mb-6">Səbətiniz</h1>
 
 {% if cart_items %}
 <div class="grid gap-4">
-
   {% for item in cart_items %}
   <div class="flex justify-between items-center border p-4 rounded-xl">
-
     <div class="flex items-center gap-4">
-      <img src="{{item.image}}" class="h-20 rounded">
-
-      <div>
-        <p class="font-bold">{{item.name}}</p>
-
-        <p class="text-sm text-gray-500">
-          Rəng: {{item.color if item.color else 'Seçilməyib'}} |
-          Storage: {{item.storage if item.storage else 'Seçilməyib'}}
-        </p>
-      </div>
+      <img src="{{item.image}}" class="h-20">
+      <span>{{item.name}}</span>
     </div>
-
     <span class="font-bold">{{item.price}} AZN</span>
   </div>
   {% endfor %}
-
 </div>
 
 <p class="mt-6 text-xl font-bold">Cəmi: {{total}} AZN</p>
