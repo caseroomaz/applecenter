@@ -6,9 +6,9 @@ app.secret_key = "applecenter_2026_premium_key"
 ADMIN_USER = "admin"
 ADMIN_PASS = "1234"
 
-# -------------------------------
+# -----------------------------------
 # PRODUCTS (SƏNİN ORİJİNAL)
-# -------------------------------
+# -----------------------------------
 products = [
     {
         "id": 1,
@@ -16,7 +16,7 @@ products = [
         "price": 3199,
         "category": "iPhone",
         "images": [
-            "https://store.storeimages.apple.com/...",
+            "https://store.storeimages.cdn-apple.com/..."
         ],
         "colors": ["#f5f5f7","#0A1F44","#FF8C00"],
         "likes": 0
@@ -36,25 +36,27 @@ products = [
         "price": 349,
         "category": "AirPods",
         "images": [],
+        "colors": [],
         "likes": 0
     }
 ]
 
-# -------------------------------
-# 🔥 FIX: SESSION CART (BURASI DƏYİŞDİ)
-# -------------------------------
+# -----------------------------------
+# 🔥 FIX: CART SYSTEM (YENİ + STABIL)
+# -----------------------------------
 def get_cart():
     if "cart" not in session:
         session["cart"] = []
     return session["cart"]
-
 
 def save_cart(cart):
     session["cart"] = cart
     session.modified = True
 
 
+# -----------------------------------
 # HOME
+# -----------------------------------
 @app.route("/")
 def home():
     q = request.args.get("q")
@@ -80,18 +82,26 @@ def product(id):
     return render_template("product.html", product=p)
 
 
-# -------------------------------
-# 🛒 FIXED CART ADD
-# -------------------------------
-@app.route("/cart/add/<int:id>")
-def cart_add(id):
-    p = next((x for x in products if x["id"] == id), None)
+# -----------------------------------
+# 🛒 FIXED ADD TO CART (HEÇ NƏ SİLMİRMİR)
+# -----------------------------------
+@app.route("/cart/add", methods=["POST"])
+def cart_add():
+    data = request.get_json()
 
-    if p:
-        cart = get_cart()
-        cart.append(p.copy())   # IMPORTANT FIX (copy)
+    cart = get_cart()
 
-        save_cart(cart)
+    # FULL PRODUCT SAVE (color + storage + image)
+    cart.append({
+        "id": data["id"],
+        "name": data["name"],
+        "price": int(data["price"]),
+        "image": data["image"],
+        "color": data.get("color"),
+        "storage": data.get("storage")
+    })
+
+    save_cart(cart)
 
     return redirect("/cart")
 
@@ -100,14 +110,16 @@ def cart_add(id):
 @app.route("/cart")
 def cart():
     cart = get_cart()
-    total = sum(item['price'] for item in cart)
+    total = sum(item["price"] for item in cart)
 
     return render_template("cart.html",
                            cart_items=cart,
                            total=total)
 
 
-# ADMIN LOGIN
+# -----------------------------------
+# ADMIN (SƏNİN ORİJİNAL SAXLANIB)
+# -----------------------------------
 @app.route("/admin/login", methods=["GET","POST"])
 def admin_login():
     if request.method=="POST":
@@ -117,7 +129,6 @@ def admin_login():
     return render_template("admin_login.html")
 
 
-# ADMIN PANEL
 @app.route("/admin")
 def admin():
     if "admin" not in session:
@@ -125,7 +136,6 @@ def admin():
     return render_template("admin.html", products=products)
 
 
-# ADD PRODUCT
 @app.route("/admin/add", methods=["POST"])
 def add_product():
     if "admin" not in session:
@@ -140,12 +150,12 @@ def add_product():
         "images": [request.form["image"]],
         "category": request.form.get("category","Other"),
         "colors": ["#000","#fff"],
-        "likes":0
+        "likes": 0
     })
+
     return redirect("/admin")
 
 
-# DELETE
 @app.route("/admin/delete/<int:id>")
 def delete_product(id):
     global products
