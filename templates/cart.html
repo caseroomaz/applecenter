@@ -21,8 +21,10 @@
 
       <div>
         <p class="font-bold">{{item.name}}</p>
+
         <p class="text-sm text-gray-500">
-          Rəng: {{item.color}} | Yaddaş: {{item.storage}}
+          Rəng: {{item.color if item.color else 'Seçilməyib'}} |
+          Storage: {{item.storage if item.storage else 'Seçilməyib'}}
         </p>
       </div>
     </div>
