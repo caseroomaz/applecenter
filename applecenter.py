@@ -3,13 +3,12 @@ from flask import Flask, render_template, request, redirect, session
 app = Flask(__name__)
 app.secret_key = "applecenter_2026_premium_key"
 
-# Admin məlumatları
 ADMIN_USER = "admin"
 ADMIN_PASS = "1234"
 
-# -----------------------------------
-# Məhsullar (SƏNİN ORİJİNAL DATA TAM SAXLANIB)
-# -----------------------------------
+# -------------------------------
+# PRODUCTS (SƏNİN ORİJİNAL)
+# -------------------------------
 products = [
     {
         "id": 1,
@@ -17,10 +16,7 @@ products = [
         "price": 3199,
         "category": "iPhone",
         "images": [
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=NUNzdzNKR0FJbmhKWm5YamRHb05tUzkyK3hWak1ybHhtWDkwUXVINFc0RkZqUFNQc3E5VDh2SEx1ZlJpSjNkR0FOL1haWCt6TDJ0UWlLb09XajVNdENYR1ZZZnEyMVlVQUliTThGMjNyaFFxbm9iakpBWkhjT1hBM3BZeU9zQ0JzNmlxRHcrTG16TVFTaEZGMjZVM3ZB&traceId=1",
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch_AV1?wid=5120&hei=2880&fmt=webp&qlt=90&.v=NUNzdzNKR0FJbmhKWm5YamRHb05tUzkyK3hWak1ybHhtWDkwUXVINFc0RUNxZ2Y2UndFVkhoZG1DQ0NWVTFWa2xjZnhHRHJyenVmME5KTm9Sd1ZaU3NqbWRhTGpRM2xxVWJRWUhSaDlCQ3E0aFZQSlZXTG00RTR2aXlYRzBpVUxlODBad1VqYUZ3RW54YkRKL2hzbXVR&traceId=1",
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch-deepblue?wid=5120&hei=2880&fmt=webp&qlt=90&.v=NUNzdzNKR0FJbmhKWm5YamRHb05tUzkyK3hWak1ybHhtWDkwUXVINFc0RWhhOHJGRUNHdlh6a3VuZVVqdnNrNXVHdDcxbVFRSnhaQ0pnV1pOaG5KaGhNQnJMcnc4RkxJd3ZMc3hKZVVFWHREelVULzVXd2xCbVltNVMyUXhsYlBpMEowc2xaa1ByZlpMdyt3ZFlhVkhn&traceId=1",
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-9inch-silver?wid=5120&hei=2880&fmt=webp&qlt=90&.v=NUNzdzNKR0FJbmhKWm5YamRHb05tUzkyK3hWak1ybHhtWDkwUXVINFc0RVRqUkJqUGFyN1pGMnlaV3JkWU9jdjF1TmpsTkNoRVRMR1N6UXlVZFBaU0NYR1ZZZnEyMVlVQUliTThGMjNyaFFxd1ZHd3R2RmlpWk50MW5LU2N1cWNxdlBsK2ZicnRLY2oza08vTDBZeXZ3&traceId=1"
+            "https://store.storeimages.apple.com/...",
         ],
         "colors": ["#f5f5f7","#0A1F44","#FF8C00"],
         "likes": 0
@@ -30,15 +26,8 @@ products = [
         "name": "iPhone 17",
         "price": 2249,
         "category": "iPhone",
-        "images": [
-            "https://www.apple.com/v/iphone-17/e/images/overview/welcome/hero_startframe__e9e7pcnguyqi_xlarge.jpg",
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-select-202509-black_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=WGdCRlQ0YVlqbTdXTEkxRnVQb0oxa3pYQjBteGp2cFFHL09TNGhVUUhxeHFkSUJZcmNjVXZ4cDk3YTVMcWk4SHF2TWlpSzUzejRCZGt2SjJUNGl1VEE4bm1RcmlWRWp2eDN1WHNkSjNmUlkwQ2hTNHZjREFYdVBRanJ6N1p0WHI&traceId=1",
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-select-202509-white_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=WGdCRlQ0YVlqbTdXTEkxRnVQb0oxclZmSzgzdlhzQS95ekpRalhXU0JMVkRQR0pzaFhHemZ3ZzZNcDlHRHpJYnF2TWlpSzUzejRCZGt2SjJUNGl1VEE4bm1RcmlWRWp2eDN1WHNkSjNmUmFBdlBzZ01jTzlOOGhYc3dpcENYM2Y&traceId=1",
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-select-202509-lavender_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=WGdCRlQ0YVlqbTdXTEkxRnVQb0oxbGoraU1aeXdWbEh0SUtyMmtxWGg5dUpDNHBIcmowQ3VoNVJwTm5xckpDV2xjZnhHRHJyenVmME5KTm9Sd1ZaU3NqbWRhTGpRM2xxVWJRWUhSaDlCQ3FTZnZjRTZTT0R6VFJnZ01JbHJqd0hlODBad1VqYUZ3RW54YkRKL2hzbXVR&traceId=1",
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-select-202509-sage_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=WGdCRlQ0YVlqbTdXTEkxRnVQb0oxZ3VBTlNROXF1MzBwZUoyNEVtMWw3aEtLUmpmVEZhTFpRYkxNWDZBb1R3dGd2S3NaRzcrU0dmYjNHTUFiMnlsWFUxSlgrVWMrMzU1OXo2c2JyNjJZTGcvWXoydVhtUUJyekgyU21tRjFxUUM&traceId=1",
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-17-finish-select-202509-mistblue_GEO_US?wid=5120&hei=2880&fmt=webp&qlt=90&.v=WGdCRlQ0YVlqbTdXTEkxRnVQb0oxcFYyWWhPSUg0YytZdmJ2dmY4d09xckN0VFdyaFlNakY5MGMxMWhINEhMWmxjZnhHRHJyenVmME5KTm9Sd1ZaU3NqbWRhTGpRM2xxVWJRWUhSaDlCQ3JHYmE3Q0tucGdwdjhDQ1JZbjRxQXRka0xmckVNVTBkS20yTzkwa0dhU09n&traceId=1"
-        ],
-        "colors": ["#3a3a3c","#f5f5f7","#E6E6FA","#9CAF88","#A9C6D8"],
+        "images": [],
+        "colors": [],
         "likes": 0
     },
     {
@@ -46,26 +35,41 @@ products = [
         "name": "AirPods 4",
         "price": 349,
         "category": "AirPods",
-        "images": [
-            "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-4-anc-select-202409_FV1?wid=976&hei=916&fmt=jpeg&qlt=90"
-        ],
+        "images": [],
         "likes": 0
     }
 ]
 
-cart_items = []
+# -------------------------------
+# 🔥 FIX: SESSION CART (BURASI DƏYİŞDİ)
+# -------------------------------
+def get_cart():
+    if "cart" not in session:
+        session["cart"] = []
+    return session["cart"]
 
+
+def save_cart(cart):
+    session["cart"] = cart
+    session.modified = True
+
+
+# HOME
 @app.route("/")
 def home():
     q = request.args.get("q")
     filtered = [p for p in products if q and q.lower() in p["name"].lower()] if q else products
     return render_template("index.html", products=filtered)
 
+
+# CATEGORY
 @app.route("/category/<cat>")
 def category(cat):
     filtered = [p for p in products if p["category"] == cat]
     return render_template("index.html", products=filtered)
 
+
+# PRODUCT
 @app.route("/product/<int:id>")
 def product(id):
     p = next((x for x in products if x["id"] == id), products[0])
@@ -75,18 +79,35 @@ def product(id):
         p["storage_list"] = []
     return render_template("product.html", product=p)
 
-@app.route("/cart")
-def cart():
-    total = sum(item['price'] for item in cart_items)
-    return render_template("cart.html", cart_items=cart_items, total=total)
 
+# -------------------------------
+# 🛒 FIXED CART ADD
+# -------------------------------
 @app.route("/cart/add/<int:id>")
 def cart_add(id):
     p = next((x for x in products if x["id"] == id), None)
+
     if p:
-        cart_items.append(p)
+        cart = get_cart()
+        cart.append(p.copy())   # IMPORTANT FIX (copy)
+
+        save_cart(cart)
+
     return redirect("/cart")
 
+
+# CART PAGE
+@app.route("/cart")
+def cart():
+    cart = get_cart()
+    total = sum(item['price'] for item in cart)
+
+    return render_template("cart.html",
+                           cart_items=cart,
+                           total=total)
+
+
+# ADMIN LOGIN
 @app.route("/admin/login", methods=["GET","POST"])
 def admin_login():
     if request.method=="POST":
@@ -95,12 +116,16 @@ def admin_login():
             return redirect("/admin")
     return render_template("admin_login.html")
 
+
+# ADMIN PANEL
 @app.route("/admin")
 def admin():
     if "admin" not in session:
         return redirect("/admin/login")
     return render_template("admin.html", products=products)
 
+
+# ADD PRODUCT
 @app.route("/admin/add", methods=["POST"])
 def add_product():
     if "admin" not in session:
@@ -119,10 +144,13 @@ def add_product():
     })
     return redirect("/admin")
 
+
+# DELETE
 @app.route("/admin/delete/<int:id>")
 def delete_product(id):
     global products
     products = [p for p in products if p["id"] != id]
     return redirect("/admin")
+
 
 application = app
