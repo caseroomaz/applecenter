@@ -26,6 +26,7 @@
 <!-- INFO -->
 <div>
     <h1 class="text-4xl font-bold">{{product.name}}</h1>
+
     <p id="price" class="text-2xl mt-3">{{product.price}} AZN</p>
 
     <!-- COLORS -->
@@ -35,7 +36,7 @@
         {% for c in product.colors %}
             <div onclick="selectColor(this,'{{c}}')"
                  style="background:{{c}}"
-                 class="w-10 h-10 rounded-full border cursor-pointer"></div>
+                 class="w-10 h-10 rounded-full border cursor-pointer color-box"></div>
         {% endfor %}
         </div>
     </div>
@@ -45,14 +46,13 @@
         <p class="text-sm text-gray-500">Yaddaş</p>
         <div class="flex gap-3 mt-3">
         {% for s in product.storage_list %}
-            <div onclick="selectStorage(this,'{{s}}',{{loop.index0}})"
-                 class="border p-3 rounded-lg cursor-pointer">{{s}}</div>
+            <div onclick="priceUpdate({{loop.index0}},'{{s}}')"
+                 class="border p-3 rounded-lg cursor-pointer storage-box">{{s}}</div>
         {% endfor %}
         </div>
     </div>
 
-    <!-- BUTTON -->
-    <button onclick="addToCart()" class="bg-blue-600 text-white p-3 mt-8 rounded-xl w-full hover:bg-blue-700">
+    <button onclick="addToCart()" class="bg-blue-600 text-white p-3 mt-8 rounded-xl w-full hover:bg-blue-700 transition">
         Səbətə əlavə et
     </button>
 
@@ -62,25 +62,40 @@
 <script>
 let base = parseInt("{{product.price}}");
 
-let selectedColor = "{{product.colors[0]}}";
-let selectedStorage = "{{product.storage_list[0]}}";
+let selectedColor = "{{product.colors[0] if product.colors else ''}}";
+let selectedStorage = "";
 let finalPrice = base;
 
 function showImage(src){
     document.getElementById("mainImg").src = src;
 }
 
+// COLOR
 function selectColor(el,color){
     selectedColor = color;
+
+    document.querySelectorAll(".color-box").forEach(e=>{
+        e.style.border = "1px solid #ccc";
+    });
+
+    el.style.border = "2px solid blue";
 }
 
-function selectStorage(el,storage,i){
+// STORAGE + PRICE
+function priceUpdate(i,storage){
     selectedStorage = storage;
     finalPrice = base + (i * 200);
+
     document.getElementById("price").innerText = finalPrice + " AZN";
+
+    document.querySelectorAll(".storage-box").forEach(e=>{
+        e.style.border = "1px solid #ccc";
+    });
+
+    event.target.style.border = "2px solid blue";
 }
 
-// ADD TO CART (REAL FIX)
+// ADD TO CART
 function addToCart(){
     fetch("/cart/add", {
         method: "POST",
@@ -95,9 +110,8 @@ function addToCart(){
             color: selectedColor,
             storage: selectedStorage
         })
-    }).then(res => {
-        window.location.href = "/cart";
-    });
+    })
+    .then(()=> window.location.href = "/cart");
 }
 </script>
 
