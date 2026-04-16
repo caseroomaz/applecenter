@@ -5,18 +5,20 @@
 <title>{{product.name}}</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="p-10 bg-[#fbfbfd]">
 
 <a href="/" class="text-blue-600 hover:underline">← Ana səhifəyə qayıt</a>
 
 <div class="grid md:grid-cols-2 gap-10 mt-10">
 
-<!-- IMAGE SLIDER -->
+<!-- IMAGE -->
 <div>
     <img id="mainImg" src="{{product.images[0]}}" class="h-96 mx-auto rounded-xl shadow-md object-contain">
+
     <div class="flex justify-center gap-2 mt-3">
       {% for img in product.images %}
-        <img onclick="showImage('{{img}}')" src="{{img}}" class="h-16 cursor-pointer border rounded-md hover:border-blue-500 transition">
+        <img onclick="showImage('{{img}}')" src="{{img}}" class="h-16 cursor-pointer border rounded-md hover:border-blue-500">
       {% endfor %}
     </div>
 </div>
@@ -31,9 +33,9 @@
         <p class="text-sm text-gray-500">Rəng seç</p>
         <div class="flex gap-3 mt-3">
         {% for c in product.colors %}
-            <div onclick="selectColor(this,{{loop.index0}})"
+            <div onclick="selectColor(this,'{{c}}')"
                  style="background:{{c}}"
-                 class="w-10 h-10 rounded-full border cursor-pointer hover:border-blue-500 transition"></div>
+                 class="w-10 h-10 rounded-full border cursor-pointer"></div>
         {% endfor %}
         </div>
     </div>
@@ -43,14 +45,15 @@
         <p class="text-sm text-gray-500">Yaddaş</p>
         <div class="flex gap-3 mt-3">
         {% for s in product.storage_list %}
-            <div onclick="priceUpdate({{loop.index0}})"
-                 class="border p-3 rounded-lg cursor-pointer hover:border-blue-500 transition">{{s}}</div>
+            <div onclick="selectStorage(this,'{{s}}',{{loop.index0}})"
+                 class="border p-3 rounded-lg cursor-pointer">{{s}}</div>
         {% endfor %}
         </div>
     </div>
 
-    <button class="bg-blue-600 text-white p-3 mt-8 rounded-xl w-full hover:bg-blue-700 transition">
-        <a href="/cart/add/{{product.id}}">Səbətə əlavə et</a>
+    <!-- BUTTON -->
+    <button onclick="addToCart()" class="bg-blue-600 text-white p-3 mt-8 rounded-xl w-full hover:bg-blue-700">
+        Səbətə əlavə et
     </button>
 
 </div>
@@ -59,23 +62,42 @@
 <script>
 let base = parseInt("{{product.price}}");
 
-// Şəkil slider
+let selectedColor = "{{product.colors[0]}}";
+let selectedStorage = "{{product.storage_list[0]}}";
+let finalPrice = base;
+
 function showImage(src){
     document.getElementById("mainImg").src = src;
 }
 
-// Rəng seçimi
-function selectColor(el, idx){
-    document.querySelectorAll("div[onclick^='selectColor']").forEach(i=>i.style.border="");
-    el.style.border="2px solid blue";
-    // rəngə uyğun şəkillər (indiki versiya sadəcə default olaraq ilk şəkili göstərir)
-    let imgs = {{product.images | tojson}};
-    document.getElementById("mainImg").src = imgs[0];
+function selectColor(el,color){
+    selectedColor = color;
 }
 
-// Yaddaş seçimi → qiymət yenilənir
-function priceUpdate(i){
-    document.getElementById("price").innerText = (base + i*200) + " AZN";
+function selectStorage(el,storage,i){
+    selectedStorage = storage;
+    finalPrice = base + (i * 200);
+    document.getElementById("price").innerText = finalPrice + " AZN";
+}
+
+// ADD TO CART (REAL FIX)
+function addToCart(){
+    fetch("/cart/add", {
+        method: "POST",
+        headers: {
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+            id: "{{product.id}}",
+            name: "{{product.name}}",
+            image: document.getElementById("mainImg").src,
+            price: finalPrice,
+            color: selectedColor,
+            storage: selectedStorage
+        })
+    }).then(res => {
+        window.location.href = "/cart";
+    });
 }
 </script>
 
